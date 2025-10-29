@@ -1,10 +1,10 @@
-# Workflow Tools Plugin for Claude Code
+# Claude Code Plugins Marketplace
 
-A workflow automation plugin for codebase research, planning, implementation, and documentation.
+This repository is a marketplace for Claude Code plugins. It currently contains the **Workflow Tools** plugin for codebase research, planning, implementation, and documentation.
 
-## Overview
+## Workflow Tools Plugin
 
-This plugin provides four commands that work together with specialized research agents. The full flow is
+The Workflow Tools plugin provides four commands that work together with specialized research agents. The full flow is
 
 1. `/research-codebase`
 2. `/create-plan`
@@ -141,10 +141,10 @@ Team members will auto-install the plugin when they trust the repository.
 
 For local plugin development:
 
-1. **Add your local plugin directory as a marketplace:**
+1. **Add your local marketplace directory:**
 
    ```bash
-   /plugin marketplace add /path/to/plugin
+   /plugin marketplace add /path/to/claude-code-plugins
    ```
 
 2. **Install the plugin:**
@@ -348,28 +348,31 @@ This script is automatically referenced using `${CLAUDE_PLUGIN_ROOT}/scripts/` p
 
 ## Development
 
-### Plugin Structure
+### Repository Structure
 
 ```
-plugin/
+claude-code-plugins/          # Marketplace root
 ├── .claude-plugin/
-│   └── plugin.json          # Plugin manifest
-├── commands/                 # Slash commands
-│   ├── research-codebase.md
-│   ├── create-plan.md
-│   ├── implement-plan.md
-│   └── summarize-work.md
-├── agents/                   # Specialized agents
-│   ├── codebase-locator.md
-│   ├── codebase-analyzer.md
-│   ├── codebase-pattern-finder.md
-│   ├── notes-locator.md
-│   ├── notes-analyzer.md
-│   ├── web-search-researcher.md
-│   └── jira-searcher.md
-├── scripts/                  # Helper scripts
-│   └── claude-md-frontmatter.sh
-└── README.md
+│   └── marketplace.json      # Marketplace manifest
+└── workflow-tools/           # Plugin directory
+    ├── .claude-plugin/
+    │   └── plugin.json       # Plugin manifest
+    ├── commands/             # Slash commands
+    │   ├── research-codebase.md
+    │   ├── create-plan.md
+    │   ├── implement-plan.md
+    │   └── summarize-work.md
+    ├── agents/               # Specialized agents
+    │   ├── codebase-locator.md
+    │   ├── codebase-analyzer.md
+    │   ├── codebase-pattern-finder.md
+    │   ├── notes-locator.md
+    │   ├── notes-analyzer.md
+    │   ├── web-search-researcher.md
+    │   └── jira-searcher.md
+    ├── scripts/              # Helper scripts
+    │   └── claude-md-frontmatter.sh
+    └── CLAUDE.md
 ```
 
 ## Acknowledgments
