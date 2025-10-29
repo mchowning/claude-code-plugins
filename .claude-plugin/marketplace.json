@@ -1,0 +1,15 @@
+{
+  "name": "mchowning-marketplace",
+  "owner": {
+    "name": "Matt Chowning",
+    "email": "mchowning@gmail.com"
+  },
+  "plugins": [
+    {
+      "name": "workflow-tools",
+      "source": "./workflow-tools",
+      "description": "Comprehensive workflow automation for codebase research, planning, implementation, and documentation",
+      "version": "1.0.0"
+    }
+  ]
+}
