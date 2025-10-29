@@ -125,7 +125,9 @@ To automatically install the plugin, add to `.claude/settings.json`:
       }
     }
   },
-  "enabledPlugins": ["workflow-tools@mchowning-marketplace"]
+  "enabledPlugins": {
+    "workflow-tools@mchowning-marketplace": true
+  }
 }
 ```
 
@@ -148,6 +150,24 @@ For local plugin development:
    ```
 
 3. **Restart Claude Code** to load the plugin
+
+**Alternative:** Configure in `.claude/settings.json` for local development:
+
+```json
+{
+  "extraKnownMarketplaces": {
+    "mchowning-marketplace": {
+      "source": {
+        "source": "directory",
+        "path": "/absolute/path/to/claude-code-plugins"
+      }
+    }
+  },
+  "enabledPlugins": {
+    "workflow-tools@mchowning-marketplace": true
+  }
+}
+```
 
 ## Configuration
 
