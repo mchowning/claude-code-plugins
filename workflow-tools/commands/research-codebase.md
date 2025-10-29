@@ -44,8 +44,9 @@ Then wait for the user's research query.
    - Use the **web-search-researcher** agent for external documentation and resources
    - Instruct the agent to return LINKS with their findings, and please INCLUDE those links in your final report
 
-   **For Jira research**
-   - Use the **jira-searcher** agent to search for relevant jira issues that may provide historical context
+   **For historical context:**
+   - Use the **jira-searcher** agent to search for relevant Jira issues that may provide business context
+   - Use the **git-history** agent to search git history, PRs, and PR comments for implementation context and technical decisions
 
    The key is to use these agents intelligently:
    - Start with locator agents to find what exists

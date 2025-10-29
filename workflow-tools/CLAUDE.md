@@ -18,7 +18,7 @@ This plugin provides four workflow commands:
 
 ## Specialized Agents
 
-The plugin includes seven specialized agents that are automatically invoked by commands:
+The plugin includes eight specialized agents that are automatically invoked by commands:
 
 - **codebase-locator** - Finds WHERE files, directories, and components live
 - **codebase-analyzer** - Analyzes HOW code works with precise file:line references
@@ -26,4 +26,5 @@ The plugin includes seven specialized agents that are automatically invoked by c
 - **notes-locator** - Discovers relevant notes/documents in `WORKING_NOTES_DIR`
 - **notes-analyzer** - Deeply analyzes notes documents and extracts insights
 - **web-search-researcher** - Conducts web research for external documentation
-- **jira-searcher** - Searches Jira for issues and historical context
+- **jira-searcher** - Searches Jira for issues and business context
+- **git-history** - Searches git history, PRs, and PR comments for implementation context
