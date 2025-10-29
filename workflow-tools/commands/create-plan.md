@@ -164,7 +164,7 @@ Once aligned on approach:
 
 After structure approval:
 
-1. Run the the script `${CLAUDE_PLUGIN_ROOT}/scripts/claude-md-frontmatter.sh` to get frontmatter data
+1. Invoke the frontmatter-generator agent using Task tool with `subagent_type: workflow-tools:frontmatter-generator` to collect metadata. Wait for the agent to return metadata before proceeding.
 2. **Write the plan** to `[WORKING_NOTES_DIR]/{YYYY-MM-DD}_plan_[descriptive-name].md`. Use `date '%Y-%m-%d'` for the timestamp in the filename
 3. **Use this template structure**:
 

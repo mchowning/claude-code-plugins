@@ -122,7 +122,7 @@ Then wait for the user's input.
 ### Step 9: Generate Implementation Summary
 
 1. **Gather metadata for the document:**
-   - Run `${CLAUDE_PLUGIN_ROOT}/scripts/claude-md-frontmatter.sh` to get frontmatter data
+   - Invoke the frontmatter-generator agent using Task tool with `subagent_type: workflow-tools:frontmatter-generator` to collect metadata. Wait for the agent to return metadata before proceeding.
    - Use `date '+%Y-%m-%d'` for the filename timestamp
    - Create descriptive filename: `NOTES_DIR/YYYY-MM-DD_descriptive-name.md`.
 
@@ -279,6 +279,6 @@ The implementation summary is complete when:
 - [ ] Technical Details explain WHY, not just WHAT
 - [ ] Git References section includes all commits with full messages
 - [ ] GitHub permalinks included (if applicable)
-- [ ] Frontmatter generated via `${CLAUDE_PLUGIN_ROOT}/scripts/claude-md-frontmatter.sh`
+- [ ] Frontmatter generated via frontmatter-generator agent
 - [ ] File saved to `NOTES_DIR/YYYY-MM-DD_descriptive-name.md`
 - [ ] Document is standalone (no references to research/plan docs)
