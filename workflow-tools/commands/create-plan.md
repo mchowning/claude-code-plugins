@@ -2,16 +2,20 @@
 
 You are tasked with creating detailed implementation plans through an interactive, iterative process. You should be skeptical, thorough, and work collaboratively with the user to produce high-quality technical specifications.
 
-## Initial Response
-
 When this command is invoked:
 
-1. **Check if parameters were provided**:
-   - If a file path or ticket reference was provided as a parameter, skip the default message
-   - Immediately read any provided files FULLY
+1. **Check if arguments were provided**:
+   - If the provided file paths, ticket references, or task descriptions, skip the default message below
+   - Look for:
+     - File paths (e.g., `working-notes/...`, `notes/...`)
+     - @-mentions of files (e.g., `@working-notes/...`)
+     - Ticket references (e.g., `ABC-1234`, `PROJ-567`)
+     - Task descriptions or requirements text
+   - Immediately read any provided files FULLY (without using limit/offset)
    - Begin the research process
 
-2. **If no parameters provided**, respond with:
+2. **If the no arugments were provided**, respond with:
+
 ```
 I'll help you create a detailed implementation plan. Let me start by understanding what we're building.
 
@@ -42,7 +46,6 @@ If a Jira ticket number is given, use the jira-searcher subagent to get informat
 
 2. **Spawn initial research tasks to gather context**:
    Before asking the user any questions, use specialized agents to research in parallel:
-
    - Use the **codebase-locator** agent to find all files related to the ticket/task
    - Use the **codebase-analyzer** agent to understand how the current implementation works
    - If relevant, use the **thoughts-locator** agent to find any existing thoughts documents about this feature
@@ -64,6 +67,7 @@ If a Jira ticket number is given, use the jira-searcher subagent to get informat
    - Determine true scope based on codebase reality
 
 5. **Present informed understanding and focused questions**:
+
    ```
    Based on the ticket and my research of the codebase, I understand we need to [accurate summary].
 
@@ -77,6 +81,7 @@ If a Jira ticket number is given, use the jira-searcher subagent to get informat
    - [Business logic clarification]
    - [Design preference that affects implementation]
    ```
+
    Only ask questions that you cannot answer through code investigation. Use the AskUserQuestion tool to ask the user questions.
 
 ### Step 2: Research & Discovery
@@ -111,9 +116,10 @@ After getting initial clarifications:
    - Return specific file:line references
    - Find tests and examples
 
-3. **Wait for ALL sub-tasks to complete** before proceeding
+4. **Wait for ALL sub-tasks to complete** before proceeding
 
-4. **Present findings and design options**:
+5. **Present findings and design options**:
+
    ```
    Based on my research, here's what I found:
 
@@ -137,6 +143,7 @@ After getting initial clarifications:
 Once aligned on approach:
 
 1. **Create initial plan outline**:
+
    ```
    Here's my proposed plan structure:
 
@@ -161,7 +168,7 @@ After structure approval:
 2. **Write the plan** to `[WORKING_NOTES_DIR]/{YYYY-MM-DD}_plan_[descriptive-name].md`. Use `date '%Y-%m-%d'` for the timestamp in the filename
 3. **Use this template structure**:
 
-```markdown
+````markdown
 ---
 date: [Current date and time with timezone in ISO format]
 git_commit: [Current commit hash]
@@ -188,6 +195,7 @@ last_updated: [Current date in YYYY-MM-DD format]
 [A Specification of the desired end state after this plan is complete, and how to verify it]
 
 ### Key Discoveries:
+
 - [Important finding with file:line reference]
 - [Pattern to follow]
 - [Constraint to work within]
@@ -203,21 +211,25 @@ last_updated: [Current date in YYYY-MM-DD format]
 ## Phase 1: [Descriptive Name]
 
 ### Overview
+
 [What this phase accomplishes]
 
 ### Changes Required:
 
 #### 1. [Component/File Group]
+
 **File**: `path/to/file.ext`
 **Changes**: [Summary of changes]
 
 ```[language]
 // Specific code to add/modify
 ```
+````
 
 ### Success Criteria:
 
 #### Automated Verification:
+
 - [ ] Migration applies cleanly: `make migrate`
 - [ ] Unit tests pass: `make test-component`
 - [ ] Type checking passes: `npm run typecheck`
@@ -225,6 +237,7 @@ last_updated: [Current date in YYYY-MM-DD format]
 - [ ] Integration tests pass: `make test-integration`
 
 #### Manual Verification:
+
 - [ ] Feature works as expected when tested via UI
 - [ ] Performance is acceptable under load
 - [ ] Edge case handling verified manually
@@ -241,13 +254,16 @@ last_updated: [Current date in YYYY-MM-DD format]
 ## Testing Strategy
 
 ### Unit Tests:
+
 - [What to test]
 - [Key edge cases]
 
 ### Integration Tests:
+
 - [End-to-end scenarios]
 
 ### Manual Testing Steps:
+
 1. [Specific step to verify feature]
 2. [Another verification step]
 3. [Edge case to test manually]
@@ -265,84 +281,88 @@ last_updated: [Current date in YYYY-MM-DD format]
 - Original ticket: Jira ticket [ABC-####]
 - Related research: `[WORKING_NOTES_DIR]/[relevant].md`
 - Similar implementation: `[file:line]`
+
 ```
 
 ### Step 5: Review
 
 1. **Present the draft plan location**:
-   ```
-   I've created the initial implementation plan at:
-   `[WORKING_NOTES_DIR]/[filename].md`
+```
 
-   Please review it and let me know:
-   - Are the phases properly scoped?
-   - Are the success criteria specific enough?
-   - Any technical details that need adjustment?
-   - Missing edge cases or considerations?
-   ```
+I've created the initial implementation plan at:
+`[WORKING_NOTES_DIR]/[filename].md`
+
+Please review it and let me know:
+
+- Are the phases properly scoped?
+- Are the success criteria specific enough?
+- Any technical details that need adjustment?
+- Missing edge cases or considerations?
+
+````
 
 2. **Iterate based on feedback** - be ready to:
-   - Add missing phases
-   - Adjust technical approach
-   - Clarify success criteria (both automated and manual)
-   - Add/remove scope items
+- Add missing phases
+- Adjust technical approach
+- Clarify success criteria (both automated and manual)
+- Add/remove scope items
 
 3. **Continue refining** until the user is satisfied
 
 ## Important Guidelines
 
 1. **Be Skeptical**:
-   - Question vague requirements
-   - Identify potential issues early
-   - Ask "why" and "what about"
-   - Don't assume - verify with code
+- Question vague requirements
+- Identify potential issues early
+- Ask "why" and "what about"
+- Don't assume - verify with code
 
 2. **Be Interactive**:
-   - Don't write the full plan in one shot
-   - Get buy-in at each major step
-   - Allow course corrections
-   - Work collaboratively
+- Don't write the full plan in one shot
+- Get buy-in at each major step
+- Allow course corrections
+- Work collaboratively
 
 3. **Be Thorough**:
-   - Read all context files COMPLETELY before planning
-   - Research actual code patterns using parallel sub-tasks
-   - Include specific file paths and line numbers
-   - Write measurable success criteria with clear automated vs manual distinction
-   - automated steps should use `make`/`yarn`/`just` whenever possible
+- Read all context files COMPLETELY before planning
+- Research actual code patterns using parallel sub-tasks
+- Include specific file paths and line numbers
+- Write measurable success criteria with clear automated vs manual distinction
+- automated steps should use `make`/`yarn`/`just` whenever possible
 
 4. **Be Practical**:
-   - Focus on incremental, testable changes
-   - Consider migration and rollback
-   - Think about edge cases
-   - Include "what we're NOT doing"
+- Focus on incremental, testable changes
+- Consider migration and rollback
+- Think about edge cases
+- Include "what we're NOT doing"
 
 5. **Track Progress**:
-   - Use TodoWrite to track planning tasks
-   - Update todos as you complete research
-   - Mark planning tasks complete when done
+- Use TodoWrite to track planning tasks
+- Update todos as you complete research
+- Mark planning tasks complete when done
 
 6. **No Open Questions in Final Plan**:
-   - If you encounter open questions during planning, STOP
-   - Research or ask for clarification immediately
-   - Do NOT write the plan with unresolved questions
-   - The implementation plan must be complete and actionable
-   - Every decision must be made before finalizing the plan
+- If you encounter open questions during planning, STOP
+- Research or ask for clarification immediately
+- Do NOT write the plan with unresolved questions
+- The implementation plan must be complete and actionable
+- Every decision must be made before finalizing the plan
 
 ## Success Criteria Guidelines
 
 **Always separate success criteria into two categories:**
 
 1. **Automated Verification** (can be run by execution agents):
-   - Commands that can be run: `make test`, `npm run lint`, etc.
-   - Specific files that should exist
-   - Code compilation/type checking
-   - Automated test suites
+- Commands that can be run: `make test`, `npm run lint`, etc.
+- Specific files that should exist
+- Code compilation/type checking
+- Automated test suites
 
 2. **Manual Verification** (requires human testing):
-   - UI/UX functionality
-   - Performance under real conditions
-   - Edge cases that are hard to automate
-   - User acceptance criteria
+- UI/UX functionality
+- Performance under real conditions
+- Edge cases that are hard to automate
+- User acceptance criteria
 
 **Format example:**
 ```markdown
@@ -359,11 +379,12 @@ last_updated: [Current date in YYYY-MM-DD format]
 - [ ] Performance is acceptable with 1000+ items
 - [ ] Error messages are user-friendly
 - [ ] Feature works correctly on mobile devices
-```
+````
 
 ## Common Patterns
 
 ### For Database Changes:
+
 - Start with schema/migration
 - Add store methods
 - Update business logic
@@ -371,6 +392,7 @@ last_updated: [Current date in YYYY-MM-DD format]
 - Update clients
 
 ### For New Features:
+
 - Research existing patterns first
 - Start with data model
 - Build backend logic
@@ -378,6 +400,7 @@ last_updated: [Current date in YYYY-MM-DD format]
 - Implement UI last
 
 ### For Refactoring:
+
 - Document current behavior
 - Plan incremental changes
 - Maintain backwards compatibility
@@ -406,6 +429,7 @@ When spawning research sub-tasks:
    - Don't accept results that seem incorrect
 
 Example of spawning multiple tasks:
+
 ```python
 # Spawn these tasks concurrently:
 tasks = [

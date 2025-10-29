@@ -35,6 +35,8 @@ Conduct comprehensive research across the codebase and the internet using parall
 
 Create detailed implementation plans through an interactive, iterative process.
 
+Often you will want to provide a research document from `/reasearch-codebase` when this command asks for context.
+
 **What it does:**
 
 - Reads any provided files for context
@@ -56,14 +58,6 @@ Follow an approved plan with strict TDD practices and progress tracking.
 - Tracks progress with checkmarks directly in the plan document
 - Handles implementation phase-by-phase
 - Verifies success criteria are met
-
-**Usage:**
-
-```bash
-/implement-plan @path/to/plan.md
-```
-
-**Note:** Requires an existing plan document created by `/create-plan`.
 
 #### 4. `/summarize-work`
 
