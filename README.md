@@ -2,14 +2,56 @@
 
 This repository is a marketplace for Claude Code plugins. It currently contains the **Workflow Tools** plugin for codebase research, planning, implementation, and documentation.
 
+## Table of Contents
+
+- [Workflow Tools Plugin](#workflow-tools-plugin)
+- [Features](#features)
+  - [Commands](#commands)
+    - [1. `/research-codebase`](#1-research-codebase)
+    - [2. `/create-plan`](#2-create-plan)
+    - [3. `/implement-plan`](#3-implement-plan)
+    - [4. `/summarize-work`](#4-summarize-work)
+  - [Specialized Agents](#specialized-agents)
+- [Installation](#installation)
+  - [Prerequisites](#prerequisites)
+  - [Installation from GitHub](#installation-from-github)
+  - [Project-Level Auto-Install](#project-level-auto-install)
+  - [Local Development](#local-development)
+- [Configuration](#configuration)
+  - [Directory Variables](#directory-variables)
+- [Workflow Example](#workflow-example)
+- [Usage Philosophy & Best Practices](#usage-philosophy--best-practices)
+  - [Philosophy & Core Principles](#philosophy--core-principles)
+  - [Context Management Strategy](#context-management-strategy)
+  - [Review Process & Priorities](#review-process--priorities)
+  - [Building Project Context with Summaries](#building-project-context-with-summaries)
+  - [When to Use This Workflow](#when-to-use-this-workflow)
+  - [Limitations & Trade-offs](#limitations--trade-offs)
+- [Command Details](#command-details)
+  - [Research Documents](#research-documents)
+  - [Plan Documents](#plan-documents)
+  - [Summary Documents](#summary-documents)
+- [Helper Scripts](#helper-scripts)
+- [Best Practices](#best-practices)
+- [Development](#development)
+  - [Areas For Improvement](#areas-for-improvement)
+  - [Repository Structure](#repository-structure)
+- [Acknowledgments](#acknowledgments)
+- [License](#license)
+- [Version](#version)
+
 ## Workflow Tools Plugin
 
-The Workflow Tools plugin provides four commands that work together with specialized research agents. The full flow is
+The Workflow Tools plugin provides four commands that work together with specialized research agents. The full flow from start to finish is:
 
 1. `/research-codebase`
 2. `/create-plan`
 3. `/implement-plan`
 4. `/summarize-work`
+
+For the full flow, each command would build off of the outputs of the previous commands. This helps to keep the agent's context window as free as possible during each step in the process. For example, the idea behind creating such detailed implementation plan documents is that the actual implementation should be very straightforward.
+
+Although these commands will often work well enough as one-shots, they are intended to be a starting point from which to iteratively build up the relevant research/plan/implementation/summary.
 
 ## Features
 
@@ -17,7 +59,7 @@ The Workflow Tools plugin provides four commands that work together with special
 
 #### 1. `/research-codebase`
 
-Conduct comprehensive research across the codebase and the internet using parallel sub-agents.
+Compile comprehensive research across the codebase and the internet using parallel sub-agents.
 
 **What it does:**
 
@@ -49,7 +91,7 @@ Often you will want to provide a research document from `/reasearch-codebase` wh
 
 #### 3. `/implement-plan`
 
-Follow an approved plan with strict TDD practices and progress tracking.
+Follow an approved plan with TDD practices and progress tracking.
 
 **What it does:**
 
@@ -361,6 +403,12 @@ This script is automatically referenced using `${CLAUDE_PLUGIN_ROOT}/scripts/` p
 6. **Keep documents updated** - Research and plans can and should be updated with follow-up information. This does not happen automatically so when there is a change in direction, it's a good idea to prompt claude to update the research and plan docs.
 
 ## Development
+
+### Areas For Improvement
+
+#### Keeping documents up-to-date
+
+The agent frequently needs to be prompted to update the various documents as decisions are made and implemenation is done. It would be great if the agent was better about doing this automatically.
 
 ### Repository Structure
 
