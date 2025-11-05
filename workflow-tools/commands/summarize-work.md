@@ -264,6 +264,12 @@ I've created the implementation summary at: `NOTES_DIR/YYYY-MM-DD_descriptive-na
 - Never assume it's "main" - could be "master", "carbon_ubuntu", etc.
 - Use the determined default branch for all git diff and merge-base commands
 
+9. **Use Objective Language**
+
+- Use objective technical language only.
+- Avoid subjective quality judgments like 'clever', 'elegant', 'nice', 'beautiful', 'clean', 'simple', 'pragmatic', or similar terms that evaluate.
+- Focus on facts and mechanisms, not value judgments.
+
 ## Success Criteria
 
 The implementation summary is complete when:
