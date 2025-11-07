@@ -93,6 +93,7 @@ After getting initial clarifications:
    - Spawn new research tasks to verify the correct information
    - Read the specific files/directories they mention
    - Only proceed once you've verified the facts yourself
+   - Keep the research file (if there is one) up-to-date with any new findings and decisions
 
 2. **Create a research todo list** using TodoWrite to track exploration tasks
 

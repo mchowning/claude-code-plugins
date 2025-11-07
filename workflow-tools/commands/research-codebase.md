@@ -175,7 +175,6 @@ Then wait for the user's research query.
   - ALWAYS wait for all sub-agents to complete before synthesizing (step 4)
   - ALWAYS gather metadata before writing the document (step 5 before step 6)
   - NEVER write the research document with placeholder values
-  - NEVER change matt/ to shared/ or vice versa - preserve the exact directory structure
   - This ensures paths are correct for editing and navigation
 - **Frontmatter consistency**:
   - Always include frontmatter at the beginning of research documents

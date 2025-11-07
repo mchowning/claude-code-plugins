@@ -1,13 +1,9 @@
-# Workflow Tools Plugin
-
-This plugin provides structured commands for codebase research, planning, implementation, and documentation.
-
-## Variables
+# Variables
 
 - `WORKING_NOTES_DIR`: `working-notes/` -- top-level directory for various notes about the project's implementation (NOT committed to git - temporary research and planning documents)
 - `NOTES_DIR`: `notes/` -- top-level directory for implementation summaries documenting what was changed and why (committed to git - permanent documentation)
 
-## Plugin Commands
+# Plugin Commands
 
 This plugin provides four workflow commands:
 
@@ -16,7 +12,7 @@ This plugin provides four workflow commands:
 3. **`/implement-plan`** - Follow an approved technical plan with TDD and progress tracking
 4. **`/summarize-work`** - Generate comprehensive implementation summaries documenting what was changed and why
 
-## Specialized Agents
+# Specialized Agents
 
 The plugin includes eight specialized agents that are automatically invoked by commands:
 
