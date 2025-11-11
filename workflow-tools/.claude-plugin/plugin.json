@@ -1,7 +1,7 @@
 {
   "name": "workflow-tools",
   "version": "1.0.0",
-  "description": "Comprehensive workflow automation for codebase research, planning, implementation, and documentation. Includes research-codebase, create-plan, implement-plan, and summarize-work commands with specialized agents.",
+  "description": "Comprehensive workflow automation for codebase research, planning, implementation, and documentation. Includes create-research-doc, create-plan-doc, implement-plan, and create-work-summary-doc commands with specialized agents.",
   "author": {
     "name": "Matt Chowning",
     "email": "mchowning@gmail.com"

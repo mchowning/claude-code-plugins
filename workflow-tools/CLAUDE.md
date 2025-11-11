@@ -7,10 +7,10 @@
 
 This plugin provides four workflow commands:
 
-1. **`/research-codebase`** - Conduct comprehensive research across the codebase using parallel sub-agents
-2. **`/create-plan`** - Create detailed implementation plans through interactive, iterative process
+1. **`/create-research-doc`** - Conduct comprehensive research across the codebase using parallel sub-agents
+2. **`/create-plan-doc`** - Create detailed implementation plans through interactive, iterative process
 3. **`/implement-plan`** - Follow an approved technical plan with TDD and progress tracking
-4. **`/summarize-work`** - Generate comprehensive implementation summaries documenting what was changed and why
+4. **`/create-work-summary-doc`** - Generate comprehensive implementation summaries documenting what was changed and why
 
 # Specialized Agents
 

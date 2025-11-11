@@ -7,10 +7,10 @@ This repository is a marketplace for Claude Code plugins. It currently contains 
 - [Workflow Tools Plugin](#workflow-tools-plugin)
 - [Features](#features)
   - [Commands](#commands)
-    - [1. `/research-codebase`](#1-research-codebase)
-    - [2. `/create-plan`](#2-create-plan)
+    - [1. `/create-research-doc`](#1-create-research-doc)
+    - [2. `/create-plan-doc`](#2-create-plan-doc)
     - [3. `/implement-plan`](#3-implement-plan)
-    - [4. `/summarize-work`](#4-summarize-work)
+    - [4. `/create-work-summary-doc`](#4-create-work-summary-doc)
   - [Specialized Agents](#specialized-agents)
 - [Installation](#installation)
   - [Prerequisites](#prerequisites)
@@ -44,10 +44,10 @@ This repository is a marketplace for Claude Code plugins. It currently contains 
 
 The Workflow Tools plugin provides four commands that work together with specialized research agents. The full flow from start to finish is:
 
-1. `/research-codebase`
-2. `/create-plan`
+1. `/create-research-doc`
+2. `/create-plan-doc`
 3. `/implement-plan`
-4. `/summarize-work`
+4. `/create-work-summary-doc`
 
 For the full flow, each command would build off of the outputs of the previous commands. This helps to keep the agent's context window as free as possible during each step in the process. For example, the idea behind creating such detailed implementation plan documents is that the actual implementation should be very straightforward.
 
@@ -57,7 +57,7 @@ Although these commands will often work well enough as one-shots, they are inten
 
 ### Commands
 
-#### 1. `/research-codebase`
+#### 1. `/create-research-doc`
 
 Compile comprehensive research across the codebase and the internet using parallel sub-agents.
 
@@ -73,11 +73,11 @@ Compile comprehensive research across the codebase and the internet using parall
 
 **Output:** Research document in `working-notes/{date}_research_{topic}.md`
 
-#### 2. `/create-plan`
+#### 2. `/create-plan-doc`
 
 Create detailed implementation plans through an interactive, iterative process.
 
-Often you will want to provide a research document from `/reasearch-codebase` when this command asks for context.
+Often you will want to provide a research document from `/create-research-doc` when this command asks for context.
 
 **What it does:**
 
@@ -101,7 +101,7 @@ Follow an approved plan with TDD practices and progress tracking.
 - Handles implementation phase-by-phase
 - Verifies success criteria are met
 
-#### 4. `/summarize-work`
+#### 4. `/create-work-summary-doc`
 
 Generate comprehensive implementation summaries documenting what changed and why.
 
@@ -231,13 +231,13 @@ Here's a typical workflow using all four commands:
 1. **Research the codebase** to understand how a feature works:
 
    ```bash
-   /research-codebase How does user authentication work in this codebase?
+   /create-research-doc How does user authentication work in this codebase?
    ```
 
 2. **Create an implementation plan** based on research:
 
    ```bash
-   /create-plan Improve auth by [...]. Look at @working-notes/2025-01-15_research_authentication-setup.md
+   /create-plan-doc Improve auth by [...]. Look at @working-notes/2025-01-15_research_authentication-setup.md
    ```
 
 3. **Implement the plan** with TDD:
@@ -248,7 +248,7 @@ Here's a typical workflow using all four commands:
 
 4. **Summarize the work** for documentation:
    ```bash
-   /summarize-work
+   /create-work-summary-doc
    ```
 
 ## Usage Philosophy & Best Practices
@@ -291,7 +291,7 @@ This prioritization may feel counterintuitive since you naturally want to skim p
 
 ### Building Project Context with Summaries
 
-The `/summarize-work` command creates committed documentation that builds institutional knowledge:
+The `/create-work-summary-doc` command creates committed documentation that builds institutional knowledge:
 
 - **notes/ summaries are committed** - Unlike temporary research in working-notes/, summaries in notes/ are permanent project documentation
 - **Searchable by future developers and agents** - When working on related features later, you or Claude can search these summaries to understand WHY decisions were made
@@ -329,7 +329,7 @@ The full 4-command workflow is powerful but not always necessary:
 - Well-understood, repetitive tasks
 - Changes that don't require architectural decisions
 
-**Rule of thumb:** If you find yourself uncertain about how to approach a task, step back and use `/research-codebase` or `/create-plan` before continuing.
+**Rule of thumb:** If you find yourself uncertain about how to approach a task, step back and use `/create-research-doc` or `/create-plan-doc` before continuing.
 
 ### Limitations & Trade-offs
 
@@ -390,10 +390,10 @@ This script is automatically referenced using `${CLAUDE_PLUGIN_ROOT}/scripts/` p
 
 ## Best Practices
 
-1. **Start with research** - Use `/research-codebase` to understand before making changes
-2. **Plan before implementing** - Use `/create-plan` to think through the approach
+1. **Start with research** - Use `/create-research-doc` to understand before making changes
+2. **Plan before implementing** - Use `/create-plan-doc` to think through the approach
 3. **Follow TDD strictly** - The `/implement-plan` command strongly encourages red-green-refactor
-4. **Document your work** - Use `/summarize-work` to create searchable implementation records
+4. **Document your work** - Use `/create-work-summary-doc` to create searchable implementation records
 5. **Iterate on plans** - The planning process is interactive; provide feedback and refine
 6. **Keep documents updated** - Research and plans can and should be updated with follow-up information. This does not happen automatically so when there is a change in direction, it's a good idea to prompt claude to update the research and plan docs.
 
@@ -415,10 +415,10 @@ claude-code-plugins/          # Marketplace root
     ├── .claude-plugin/
     │   └── plugin.json       # Plugin manifest
     ├── commands/             # Slash commands
-    │   ├── research-codebase.md
-    │   ├── create-plan.md
+    │   ├── create-research-doc.md
+    │   ├── create-plan-doc.md
     │   ├── implement-plan.md
-    │   └── summarize-work.md
+    │   └── create-work-summary-doc.md
     ├── agents/               # Specialized agents
     │   ├── codebase-locator.md
     │   ├── codebase-analyzer.md
