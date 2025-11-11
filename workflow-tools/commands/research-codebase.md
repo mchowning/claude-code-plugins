@@ -36,7 +36,7 @@ Then wait for the user's research query.
    - Use the **codebase-analyzer** agent to understand HOW specific code works
    - Use the **codebase-pattern-finder** agent if you need examples of similar implementations
 
-   **For `WORKING_NOTES_DIR` directory:**
+   **For `working-notes/` directory:**
    - Use the **notes-locator** agent to discover what documents exist about the topic
    - Use the **notes-analyzer** agent to extract key insights from specific documents (only the most relevant ones)
 
@@ -57,16 +57,16 @@ Then wait for the user's research query.
 
 4. **Wait for all sub-agents to complete and synthesize findings:**
    - IMPORTANT: Wait for ALL sub-agent tasks to complete before proceeding
-   - Compile all sub-agent results (codebase, `WORKING_NOTES_DIR` findings, and web research)
+   - Compile all sub-agent results (codebase, `working-notes/` findings, and web research)
    - Prioritize live codebase findings as primary source of truth
-   - Use `WORKING_NOTES_DIR` findings as supplementary historical context
+   - Use `working-notes/` findings as supplementary historical context
    - Connect findings across different components
    - Include specific file paths and line numbers for reference
    - Highlight patterns, connections, and architectural decisions
    - Answer the user's specific questions with concrete evidence
 
 5. **Gather metadata for the research document:**
-   - Filename: `WORKING_NOTES_DIR`/{YYYY-MM-DD}_research_[descriptive-name].md`. Use `date '+%Y-%m-%d'` for the timestamp in the filename.
+   - Filename: `working-notes/{YYYY-MM-DD}_research_[descriptive-name].md`. Use `date '+%Y-%m-%d'` for the timestamp in the filename.
    - Invoke the frontmatter-generator agent using Task tool with `subagent_type: workflow-tools:frontmatter-generator` to collect metadata.
    - Wait for the agent to return metadata before proceeding.
 
@@ -123,11 +123,11 @@ Then wait for the user's research query.
 
      ## Historical Context
 
-     [Relevant insights from `WORKING_NOTES_DIR` directory and any relevant Jira issues. Include references for all insights.]
+     [Relevant insights from `working-notes/` directory and any relevant Jira issues. Include references for all insights.]
 
      ## Related Research
 
-     [Links to past research documents in `WORKING_NOTES_DIR`]
+     [Links to past research documents in `working-notes/`]
 
      ## Open Questions
 
@@ -158,7 +158,7 @@ Then wait for the user's research query.
 
 - Always use parallel Task agents to maximize efficiency and minimize context usage
 - Always run fresh codebase research - never rely solely on existing research documents
-- The `WORKING_NOTES_DIR` directory provides historical context to supplement live findings
+- The `working-notes/` directory provides historical context to supplement live findings
 - Focus on finding concrete file paths and line numbers for developer reference
 - The research document should NOT include any references to how long things will take (i.e., Phase 1 will take 2 days)
 - Research documents should be self-contained with all necessary context
@@ -168,7 +168,7 @@ Then wait for the user's research query.
 - Link to GitHub when possible for permanent references
 - Keep the main agent focused on synthesis, not deep file reading. Use subagents for any deep file reading.
 - Encourage sub-agents to find examples and usage patterns, not just definitions
-- Explore all of `WORKING_NOTES_DIR` directory, not just research subdirectory
+- Explore all of `working-notes/` directory, not just research subdirectory
 - **File reading**: Always read mentioned files FULLY (no limit/offset) before spawning sub-tasks
 - **Critical ordering**: Follow the numbered steps exactly
   - ALWAYS read mentioned files first before spawning sub-tasks (step 1)

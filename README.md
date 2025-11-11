@@ -71,7 +71,7 @@ Compile comprehensive research across the codebase and the internet using parall
 - Fetches external resources and Jira context
 - Generates timestamped research documents with YAML frontmatter
 
-**Output:** Research document in `WORKING_NOTES_DIR/{date}_research_{topic}.md`
+**Output:** Research document in `working-notes/{date}_research_{topic}.md`
 
 #### 2. `/create-plan`
 
@@ -85,9 +85,9 @@ Often you will want to provide a research document from `/reasearch-codebase` wh
 - Spawns research tasks to gather implementation details
 - Presents design options and gathers user feedback iteratively
 - Creates comprehensive implementation plans with success criteria
-- Writes detailed plans to `WORKING_NOTES_DIR` for later execution
+- Writes detailed plans to `working-notes/` for later execution
 
-**Output:** Plan document in `WORKING_NOTES_DIR/{date}_plan_{topic}.md`
+**Output:** Plan document in `working-notes/{date}_plan_{topic}.md`
 
 #### 3. `/implement-plan`
 
@@ -95,7 +95,7 @@ Follow an approved plan with TDD practices and progress tracking.
 
 **What it does:**
 
-- Follows plans from `WORKING_NOTES_DIR` step-by-step
+- Follows plans from `working-notes/` step-by-step
 - Enforces Test-Driven Development (red-green-refactor cycle)
 - Tracks progress with checkmarks directly in the plan document
 - Handles implementation phase-by-phase
@@ -113,7 +113,7 @@ Generate comprehensive implementation summaries documenting what changed and why
 - Fetches Jira details if applicable
 - Creates standalone implementation summaries with GitHub permalinks
 
-**Output:** Summary document in `NOTES_DIR/{date}_{topic}.md`
+**Output:** Summary document in `notes/{date}_{topic}.md`
 
 ### Specialized Agents
 
@@ -122,7 +122,7 @@ The plugin includes seven specialized agents that are automatically invoked by t
 1. **codebase-locator** - Finds WHERE files, directories, and components live by topic/feature
 2. **codebase-analyzer** - Analyzes HOW code works with precise file:line references and data flow
 3. **codebase-pattern-finder** - Locates similar implementations and usage patterns as templates
-4. **notes-locator** - Discovers relevant notes/documents in `WORKING_NOTES_DIR` and `NOTES_DIR`
+4. **notes-locator** - Discovers relevant notes/documents in `working-notes/` and `notes/`
 5. **notes-analyzer** - Analyzes notes documents and extracts insights
 6. **web-search-researcher** - Conducts web research for external documentation and resources
 7. **jira-searcher** - Searches Jira for issues and historical context using JQL queries
@@ -213,19 +213,14 @@ For local plugin development:
 
 ## Configuration
 
-### Directory Variables
+### Directory Structure
 
-The plugin automatically defines the following directory variables with sensible defaults:
+The plugin uses the following directory structure:
 
-- `WORKING_NOTES_DIR`: `working-notes/` - Temporary research documents and plans (not committed to git)
-- `NOTES_DIR`: `notes/` - Implementation summaries and permanent documentation (committed to git)
+- `working-notes/` - Temporary research documents and plans (not committed to git)
+- `notes/` - Implementation summaries and permanent documentation (committed to git)
 
-**No manual configuration is required** - the plugin's CLAUDE.md defines these automatically.
-
-**Customization notes:**
-
-- `WORKING_NOTES_DIR` can be overridden in your personal `.claude/settings.json` if you prefer a different location for temporary research files
-- `NOTES_DIR` should **not** be overridden in shared repositories - all team members should commit documentation to the same directory to build a unified knowledge base
+**No manual configuration is required** - the plugin expects these directories to exist at the project root.
 
 **Recommended:** Add `working-notes/` to your `.gitignore` file since these are temporary research and planning documents. The `notes/` directory should be committed to git as permanent documentation.
 
@@ -298,7 +293,7 @@ This prioritization may feel counterintuitive since you naturally want to skim p
 
 The `/summarize-work` command creates committed documentation that builds institutional knowledge:
 
-- **NOTES_DIR summaries are committed** - Unlike temporary research in WORKING_NOTES_DIR, summaries in NOTES_DIR are permanent project documentation
+- **notes/ summaries are committed** - Unlike temporary research in working-notes/, summaries in notes/ are permanent project documentation
 - **Searchable by future developers and agents** - When working on related features later, you or Claude can search these summaries to understand WHY decisions were made
 - **Builds institutional knowledge** - Over time, you accumulate a searchable history of implementation decisions, technical trade-offs, and architectural patterns
 - **Complements code and tests** - While code shows WHAT and tests show BEHAVIOR, summaries explain WHY and document the thinking behind changes

@@ -1,6 +1,6 @@
 # Implement Plan
 
-You are tasked with implementing an approved technical plan from `WORKING_NOTES_DIR`. These plans contain phases with specific changes and success criteria.
+You are tasked with implementing an approved technical plan from `working-notes/`. These plans contain phases with specific changes and success criteria.
 
 ## Getting Started
 

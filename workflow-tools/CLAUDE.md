@@ -1,7 +1,7 @@
-# Variables
+# Directory Structure
 
-- `WORKING_NOTES_DIR`: `working-notes/` -- top-level directory for various notes about the project's implementation (NOT committed to git - temporary research and planning documents)
-- `NOTES_DIR`: `notes/` -- top-level directory for implementation summaries documenting what was changed and why (committed to git - permanent documentation)
+- `working-notes/` -- top-level directory for various notes about the project's implementation (NOT committed to git - temporary research and planning documents)
+- `notes/` -- top-level directory for implementation summaries documenting what was changed and why (committed to git - permanent documentation)
 
 # Plugin Commands
 
@@ -19,7 +19,7 @@ The plugin includes eight specialized agents that are automatically invoked by c
 - **codebase-locator** - Finds WHERE files, directories, and components live
 - **codebase-analyzer** - Analyzes HOW code works with precise file:line references
 - **codebase-pattern-finder** - Locates similar implementations and usage patterns
-- **notes-locator** - Discovers relevant notes/documents in `WORKING_NOTES_DIR`
+- **notes-locator** - Discovers relevant notes/documents in `working-notes/`
 - **notes-analyzer** - Deeply analyzes notes documents and extracts insights
 - **web-search-researcher** - Conducts web research for external documentation
 - **jira-searcher** - Searches Jira for issues and business context

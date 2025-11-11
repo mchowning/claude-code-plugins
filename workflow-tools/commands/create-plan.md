@@ -166,7 +166,7 @@ Once aligned on approach:
 After structure approval:
 
 1. Invoke the frontmatter-generator agent using Task tool with `subagent_type: workflow-tools:frontmatter-generator` to collect metadata. Wait for the agent to return metadata before proceeding.
-2. **Write the plan** to `[WORKING_NOTES_DIR]/{YYYY-MM-DD}_plan_[descriptive-name].md`. Use `date '%Y-%m-%d'` for the timestamp in the filename
+2. **Write the plan** to `working-notes/{YYYY-MM-DD}_plan_[descriptive-name].md`. Use `date '%Y-%m-%d'` for the timestamp in the filename
 3. **Use this template structure**:
 
 ````markdown
@@ -280,7 +280,7 @@ last_updated: [Current date in YYYY-MM-DD format]
 ## References
 
 - Original ticket: Jira ticket [ABC-####]
-- Related research: `[WORKING_NOTES_DIR]/[relevant].md`
+- Related research: `working-notes/[relevant].md`
 - Similar implementation: `[file:line]`
 
 ```
@@ -291,7 +291,7 @@ last_updated: [Current date in YYYY-MM-DD format]
 ```
 
 I've created the initial implementation plan at:
-`[WORKING_NOTES_DIR]/[filename].md`
+`working-notes/[filename].md`
 
 Please review it and let me know:
 

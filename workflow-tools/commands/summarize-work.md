@@ -9,7 +9,7 @@ You are tasked with creating comprehensive implementation summaries that documen
 **Check for uncommitted code changes:**
 
 - Run `git status` to check for uncommitted changes
-- Filter out documentation files (files in `WORKING_NOTES_DIR`, `NOTES_DIR`, or ending in `.md`)
+- Filter out documentation files (files in `working-notes/`, `notes/`, or ending in `.md`)
 - If there are uncommitted CODE changes:
 
   ```
@@ -124,7 +124,7 @@ Then wait for the user's input.
 1. **Gather metadata for the document:**
    - Invoke the frontmatter-generator agent using Task tool with `subagent_type: workflow-tools:frontmatter-generator` to collect metadata. Wait for the agent to return metadata before proceeding.
    - Use `date '+%Y-%m-%d'` for the filename timestamp
-   - Create descriptive filename: `NOTES_DIR/YYYY-MM-DD_descriptive-name.md`.
+   - Create descriptive filename: `notes/YYYY-MM-DD_descriptive-name.md`.
 
 2. **Write the implementation summary using this strict template:**
 
@@ -205,7 +205,7 @@ function criticalFunction() {
 1. **Present the implementation summary:**
 
 ```
-I've created the implementation summary at: `NOTES_DIR/YYYY-MM-DD_descriptive-name.md`
+I've created the implementation summary at: `notes/YYYY-MM-DD_descriptive-name.md`
 ```
 
 ## Important Guidelines
@@ -286,5 +286,5 @@ The implementation summary is complete when:
 - [ ] Git References section includes all commits with full messages
 - [ ] GitHub permalinks included (if applicable)
 - [ ] Frontmatter generated via frontmatter-generator agent
-- [ ] File saved to `NOTES_DIR/YYYY-MM-DD_descriptive-name.md`
+- [ ] File saved to `notes/YYYY-MM-DD_descriptive-name.md`
 - [ ] Document is standalone (no references to research/plan docs)
