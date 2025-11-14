@@ -14,20 +14,56 @@ When this command is invoked:
    - Immediately read any provided files FULLY (without using limit/offset)
    - Begin the research process
 
-2. **If the no arugments were provided**, respond with:
+2. **If no arguments were provided**, first check for existing documents:
 
-```
-I'll help you create a detailed implementation plan. Let me start by understanding what we're building.
+   a. **Find recent documents**:
+      - Use Bash to find the 2 most recently edited documents: `ls -t working-notes/*.md 2>/dev/null | head -2`
+      - Extract just the filenames (without path) for display
+      - Calculate the relative path from current working directory for descriptions
 
-Please provide:
-1. The task/ticket description (or reference to a ticket file)
-2. Any relevant context, constraints, or specific requirements
-3. Links to related research or previous implementations
+   b. **Present options to the user**:
+      - Use the AskUserQuestion tool to present documents as options
+      - Question: "What would you like to create a plan for?"
+      - Header: "Source"
+      - Options: Show up to 2 most recent documents from working-notes/
+        - Label: Filename only (e.g., `2025-01-15_research_auth-flow.md` or `2025-01-14_plan_feature-x.md`)
+        - Description: Relative path from current working directory (e.g., `working-notes/2025-01-15_research_auth-flow.md`)
+      - If 2+ docs found: Show 2 most recent
+      - If 1 doc found: Show that single document
+      - If 0 docs found: Skip this step and go directly to step c
+      - The automatic "Other" option will handle users who want to describe a new task
 
-I'll analyze this information and work with you to create a comprehensive plan.
-```
+   c. **Handle the user's selection**:
 
-Then wait for the user's input.
+      **If a document was selected**:
+      - Read the document FULLY (without limit/offset) into context
+      - Respond with:
+        ```
+        I'll create an implementation plan based on [filename].
+
+        Let me read through the document to understand what we're building...
+        ```
+      - After reading, extract key information:
+        - The topic/feature being discussed
+        - Key findings, discoveries, or decisions
+        - Any constraints or requirements identified
+        - Open questions or decisions needed
+      - Skip to Step 1 (Context Gathering) using the document as primary context
+      - When spawning research tasks in Step 1, reference the document's findings
+
+      **If "Other" was selected (or no docs found)**:
+      - Respond with:
+        ```
+        I'll help you create a detailed implementation plan. Let me start by understanding what we're building.
+
+        Please provide:
+        1. The task/ticket description (or reference to a ticket file)
+        2. Any relevant context, constraints, or specific requirements
+        3. Links to related research or previous implementations
+
+        I'll analyze this information and work with you to create a comprehensive plan.
+        ```
+      - Wait for the user's input before proceeding
 
 If a Jira ticket number is given, use the `workflow-tools:jira-searcher` agent to get information about the ticket.
 
