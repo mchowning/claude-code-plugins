@@ -76,7 +76,7 @@ Then wait for the user's input.
 
 1. **Fetch Jira ticket details (if applicable):**
    - If a Jira ticket number was identified in Step 3:
-     - Use the jira-searcher subagent to fetch ticket details: "Get details for Jira ticket [TICKET-NUMBER]"
+     - Use the `workflow-tools:jira-searcher` agent to fetch ticket details: "Get details for Jira ticket [TICKET-NUMBER]"
      - Extract key information: summary, description, acceptance criteria, comments
      - Use this as additional context for understanding what was implemented and why
 
@@ -122,7 +122,7 @@ Then wait for the user's input.
 ### Step 9: Generate Implementation Summary
 
 1. **Gather metadata for the document:**
-   - Invoke the frontmatter-generator agent using Task tool with `subagent_type: workflow-tools:frontmatter-generator` to collect metadata. Wait for the agent to return metadata before proceeding.
+   - Use the `workflow-tools:frontmatter-generator` agent to collect metadata. Wait for the agent to return metadata before proceeding.
    - Use `date '+%Y-%m-%d'` for the filename timestamp
    - Create descriptive filename: `notes/YYYY-MM-DD_descriptive-name.md`.
 
@@ -254,7 +254,7 @@ I've created the implementation summary at: `notes/YYYY-MM-DD_descriptive-name.m
 7. **Jira Context**:
 
 - Always check if a Jira ticket is mentioned or exists
-- Use the jira-searcher subagent to fetch ticket details when available
+- Use the `workflow-tools:jira-searcher` agent to fetch ticket details when available
 - Include Jira ticket reference in the document header
 - Use Jira information as context for understanding requirements and goals
 

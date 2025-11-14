@@ -29,7 +29,7 @@ I'll analyze this information and work with you to create a comprehensive plan.
 
 Then wait for the user's input.
 
-If a Jira ticket number is given, use the jira-searcher subagent to get information about the ticket.
+If a Jira ticket number is given, use the `workflow-tools:jira-searcher` agent to get information about the ticket.
 
 ## Process Steps
 
@@ -46,9 +46,9 @@ If a Jira ticket number is given, use the jira-searcher subagent to get informat
 
 2. **Spawn initial research tasks to gather context**:
    Before asking the user any questions, use specialized agents to research in parallel:
-   - Use the **codebase-locator** agent to find all files related to the ticket/task
-   - Use the **codebase-analyzer** agent to understand how the current implementation works
-   - If relevant, use the **thoughts-locator** agent to find any existing thoughts documents about this feature
+   - Use the `workflow-tools:codebase-locator` agent to find all files related to the ticket/task
+   - Use the `workflow-tools:codebase-analyzer` agent to understand how the current implementation works
+   - If relevant, use the `workflow-tools:notes-locator` agent to find any existing notes documents about this feature
 
    These agents will:
    - Find relevant source files, configs, and tests
@@ -102,13 +102,13 @@ After getting initial clarifications:
    - Use the right agent for each type of research:
 
    **For deeper investigation:**
-   - **codebase-locator** - To find more specific files (e.g., "find all files that handle [specific component]")
-   - **codebase-analyzer** - To understand implementation details (e.g., "analyze how [system] works")
-   - **codebase-pattern-finder** - To find similar features we can model after
+   - Use the `workflow-tools:codebase-locator` agent to find more specific files (e.g., "find all files that handle [specific component]")
+   - Use the `workflow-tools:codebase-analyzer` agent to understand implementation details (e.g., "analyze how [system] works")
+   - Use the `workflow-tools:codebase-pattern-finder` agent to find similar features we can model after
 
    **For historical context:**
-   - **thoughts-locator** - To find any research, plans, or decisions about this area
-   - **thoughts-analyzer** - To extract key insights from the most relevant documents
+   - Use the `workflow-tools:notes-locator` agent to find any research, plans, or decisions about this area
+   - Use the `workflow-tools:notes-analyzer` agent to extract key insights from the most relevant documents
 
    Each agent knows how to:
    - Find the right files and code patterns
@@ -165,7 +165,7 @@ Once aligned on approach:
 
 After structure approval:
 
-1. Invoke the frontmatter-generator agent using Task tool with `subagent_type: workflow-tools:frontmatter-generator` to collect metadata. Wait for the agent to return metadata before proceeding.
+1. Use the `workflow-tools:frontmatter-generator` agent to collect metadata. Wait for the agent to return metadata before proceeding.
 2. **Write the plan** to `working-notes/{YYYY-MM-DD}_plan_[descriptive-name].md`. Use `date '%Y-%m-%d'` for the timestamp in the filename
 3. **Use this template structure**:
 

@@ -32,21 +32,21 @@ Then wait for the user's research query.
    - We now have specialized agents that know how to do specific research tasks:
 
    **For codebase research:**
-   - Use the **codebase-locator** agent to find WHERE files and components live
-   - Use the **codebase-analyzer** agent to understand HOW specific code works
-   - Use the **codebase-pattern-finder** agent if you need examples of similar implementations
+   - Use the `workflow-tools:codebase-locator` agent to find WHERE files and components live
+   - Use the `workflow-tools:codebase-analyzer` agent to understand HOW specific code works
+   - Use the `workflow-tools:codebase-pattern-finder` agent if you need examples of similar implementations
 
    **For `working-notes/` directory:**
-   - Use the **notes-locator** agent to discover what documents exist about the topic
-   - Use the **notes-analyzer** agent to extract key insights from specific documents (only the most relevant ones)
+   - Use the `workflow-tools:notes-locator` agent to discover what documents exist about the topic
+   - Use the `workflow-tools:notes-analyzer` agent to extract key insights from specific documents (only the most relevant ones)
 
    **For web research:**
-   - Use the **web-search-researcher** agent for external documentation and resources
+   - Use the `workflow-tools:web-search-researcher` agent for external documentation and resources
    - Instruct the agent to return LINKS with their findings, and please INCLUDE those links in your final report
 
    **For historical context:**
-   - Use the **jira-searcher** agent to search for relevant Jira issues that may provide business context
-   - Use the **git-history** agent to search git history, PRs, and PR comments for implementation context and technical decisions
+   - Use the `workflow-tools:jira-searcher` agent to search for relevant Jira issues that may provide business context
+   - Use the `workflow-tools:git-history` agent to search git history, PRs, and PR comments for implementation context and technical decisions
 
    The key is to use these agents intelligently:
    - Start with locator agents to find what exists
@@ -67,7 +67,7 @@ Then wait for the user's research query.
 
 5. **Gather metadata for the research document:**
    - Filename: `working-notes/{YYYY-MM-DD}_research_[descriptive-name].md`. Use `date '+%Y-%m-%d'` for the timestamp in the filename.
-   - Invoke the frontmatter-generator agent using Task tool with `subagent_type: workflow-tools:frontmatter-generator` to collect metadata.
+   - Use the `workflow-tools:frontmatter-generator` agent to collect metadata.
    - Wait for the agent to return metadata before proceeding.
 
 6. **Generate research document:**
