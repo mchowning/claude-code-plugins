@@ -13,11 +13,24 @@ When given a plan path:
 - Create a todo list to track your progress
 - Start implementing if you understand what needs to be done
 
-If no plan path provided, ask for one:
+If no plan path provided:
 
-```
-What plan file do you want to implement?
-```
+1. Find the 2 most recently edited plan documents:
+   ```bash
+   ls -t ~/.claude/working-notes/*.md 2>/dev/null | head -2
+   ```
+
+2. Extract just the filenames (without path) from the results
+
+3. Use the AskUserQuestion tool to present them as options:
+   - If 2+ plans found: Show the 2 most recent as options
+   - If 1 plan found: Show that single plan as an option
+   - If 0 plans found: Fall back to simple text prompt "What plan file do you want to implement?"
+
+4. The question should be: "Which plan do you want to implement?"
+   - Header: "Plan"
+   - Options: The filenames only (e.g., "implement-auth.md")
+   - Each option description should be the path from the current working directory (e.g., "working-notes/implement-auth.md")
 
 ## Implementation Philosophy
 
