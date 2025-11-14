@@ -11,6 +11,7 @@ This repository is a marketplace for Claude Code plugins. It currently contains 
     - [2. `/create-plan-doc`](#2-create-plan-doc)
     - [3. `/implement-plan`](#3-implement-plan)
     - [4. `/create-work-summary-doc`](#4-create-work-summary-doc)
+    - [5. `/review-doc`](#5-review-doc)
   - [Specialized Agents](#specialized-agents)
 - [Installation](#installation)
   - [Prerequisites](#prerequisites)
@@ -42,12 +43,13 @@ This repository is a marketplace for Claude Code plugins. It currently contains 
 
 ## Workflow Tools Plugin
 
-The Workflow Tools plugin provides four commands that work together with specialized research agents. The full flow from start to finish is:
+The Workflow Tools plugin provides five commands that work together with specialized research agents. The full flow from start to finish is:
 
 1. `/create-research-doc`
 2. `/create-plan-doc`
 3. `/implement-plan`
 4. `/create-work-summary-doc`
+5. `/review-doc` (optional - review research or plan docs using external AI)
 
 For the full flow, each command would build off of the outputs of the previous commands. This helps to keep the agent's context window as free as possible during each step in the process. For example, the idea behind creating such detailed implementation plan documents is that the actual implementation should be very straightforward.
 
@@ -114,6 +116,20 @@ Generate comprehensive implementation summaries documenting what changed and why
 - Creates standalone implementation summaries with GitHub permalinks
 
 **Output:** Summary document in `notes/{date}_{topic}.md`
+
+#### 5. `/review-doc`
+
+Obtain external review of research or plan documents using another AI model for a fresh perspective.
+
+This command is particularly useful after creating research or plan documents to identify blind spots, missing considerations, or technical issues before proceeding to implementation.
+
+**What it does:**
+
+- Prompts you to select a document (prioritizes recently created documents)
+- Requires `CLAUDE_EXTERNAL_REVIEW_COMMAND` environment variable (e.g., `"opencode --model github-copilot/gpt-5 run"`)
+- Sends comprehensive review prompt covering technical accuracy, project alignment, and risk analysis
+- Critically filters the external feedback to identify truly actionable items
+- Presents categorized recommendations (Implement/Consider/Discard) with reasoning
 
 ### Specialized Agents
 
