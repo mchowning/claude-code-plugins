@@ -1,0 +1,1 @@
+- Always keep the changelog up to date when committing new changes
