@@ -195,7 +195,7 @@ Once aligned on approach:
    Does this phasing make sense? Should I adjust the order or granularity?
    ```
 
-2. **Get feedback on structure** before writing details
+2. **Share this plan outline with the user and get approval** before writing details
 
 ### Step 4: Detailed Plan Writing
 
