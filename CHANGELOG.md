@@ -8,6 +8,7 @@
 - Optional automated quality check to `/create-plan-doc` and `/create-research-doc` using `CLAUDE_EXTERNAL_REVIEW_COMMAND` environment variable ([6efb666](https://github.com/mchowning/claude-code-plugins/commit/6efb666))
 
 ### Changed
+- Enhanced `git-history` agent with explicit GitHub PR search command examples for searching PR descriptions (`gh pr list --search "in:body"`) and PR comments (`gh search prs "in:comments"`)
 - Refactored `frontmatter-generator` agent to use bundled script via `${CLAUDE_PLUGIN_ROOT}` for self-contained distribution ([e4008f8](https://github.com/mchowning/claude-code-plugins/commit/e4008f8))
 
 ## 2025-11-14
