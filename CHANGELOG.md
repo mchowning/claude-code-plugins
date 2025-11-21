@@ -1,5 +1,14 @@
 # Changelog
 
+## 2025-11-21
+
+### Added
+- `workflow-tools/scripts/workflow-tools-frontmatter.sh` script for automated metadata collection ([e4008f8](https://github.com/mchowning/claude-code-plugins/commit/e4008f8))
+- Comprehensive README.md for workflow-tools plugin with installation instructions and required permissions ([e4008f8](https://github.com/mchowning/claude-code-plugins/commit/e4008f8))
+
+### Changed
+- Refactored `frontmatter-generator` agent to use bundled script via `${CLAUDE_PLUGIN_ROOT}` for self-contained distribution ([e4008f8](https://github.com/mchowning/claude-code-plugins/commit/e4008f8))
+
 ## 2025-11-14
 
 ### Added
