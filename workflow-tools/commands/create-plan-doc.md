@@ -321,7 +321,26 @@ last_updated: [Current date in YYYY-MM-DD format]
 
 ```
 
-### Step 5: Review
+### Step 5: Automatic External Review (Internal Quality Check)
+
+1. **Check for external review environment variable:**
+   - Use Bash to check if `CLAUDE_EXTERNAL_REVIEW_COMMAND` environment variable is set: `bash -c 'echo ${CLAUDE_EXTERNAL_REVIEW_COMMAND:-NOT_SET}'`
+   - If the output is "NOT_SET", skip to step 2 (User Review)
+   - If the output contains a command, proceed with internal review
+
+2. **If environment variable IS set - Execute internal quality review:**
+   - Invoke the external review command with the comprehensive review prompt (from review-doc.md step 4) for the just-created plan document
+   - **Critically analyze the feedback with a VERY skeptical lens**:
+     - Dismiss theoretical concerns that don't apply to this specific plan
+     - Ignore feedback that adds unnecessary complexity
+     - Only identify feedback that reveals genuine gaps, errors, or missing critical considerations
+   - **Silently address ONLY critical issues**:
+     - Fix any technical errors or missing critical implementation details
+     - Add only truly important missing considerations
+     - Make minimal, focused updates - do NOT implement every suggestion
+   - **Do NOT present the review to the user** - this is an internal quality check
+
+### Step 6: User Review
 
 1. **Present the draft plan location**:
 ```

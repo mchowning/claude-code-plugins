@@ -134,19 +134,35 @@ Then wait for the user's research query.
      [Any areas that need further investigation]
      ```
 
-7. **Add GitHub permalinks (if applicable):**
+7. **Automatic External Review (Internal Quality Check):**
+   - Check for external review environment variable: `bash -c 'echo ${CLAUDE_EXTERNAL_REVIEW_COMMAND:-NOT_SET}'`
+   - **If environment variable IS set:**
+     - Invoke the external review command with the comprehensive review prompt (from review-doc.md step 4) for the just-created research document
+     - **Critically analyze the feedback with a VERY skeptical lens**:
+       - Dismiss theoretical concerns that don't apply to this specific research
+       - Ignore feedback that adds unnecessary complexity
+       - Only identify feedback that reveals genuine gaps or errors
+     - **Silently address ONLY critical issues**:
+       - Fix any factual errors or missing critical information in the document
+       - Add only truly important missing considerations
+       - Make minimal, focused updates - do NOT implement every suggestion
+     - **Do NOT present the review to the user** - this is an internal quality check
+   - **If environment variable is NOT set:**
+     - Skip this step and proceed to adding GitHub permalinks
+
+8. **Add GitHub permalinks (if applicable):**
    - Check if on main branch or if commit is pushed: `git branch --show-current` and `git status`
    - If on main/master or pushed, generate GitHub permalinks:
      - Get repo info: `gh repo view --json owner,name`
      - Create permalinks: `https://github.com/{}/{repo}/blob/{commit}/{file}#L{line}`
    - Replace local file references with permalinks in the document
 
-8. **Present findings:**
+9. **Present findings:**
    - Present a concise summary of findings to the user
    - Include key file references for easy navigation
    - Ask if they have follow-up questions or need clarification
 
-9. **Handle follow-up questions:**
+10. **Handle follow-up questions:**
    - If the user has follow-up questions, append to the same research document
    - Update the frontmatter fields `last_updated` and `last_updated_by` to reflect the update
    - Add `last_updated_note: "Added follow-up research for [brief description]"` to frontmatter
