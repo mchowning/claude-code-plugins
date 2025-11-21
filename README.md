@@ -12,6 +12,7 @@ This repository is a marketplace for Claude Code plugins. It currently contains 
     - [3. `/implement-plan`](#3-implement-plan)
     - [4. `/create-work-summary-doc`](#4-create-work-summary-doc)
     - [5. `/review-doc`](#5-review-doc)
+    - [6. `/investigate-bug`](#6-investigate-bug)
   - [Specialized Agents](#specialized-agents)
 - [Installation](#installation)
   - [Prerequisites](#prerequisites)
@@ -43,13 +44,14 @@ This repository is a marketplace for Claude Code plugins. It currently contains 
 
 ## Workflow Tools Plugin
 
-The Workflow Tools plugin provides five commands that work together with specialized research agents. The full flow from start to finish is:
+The Workflow Tools plugin provides six commands that work together with specialized research agents. The full flow from start to finish is:
 
 1. `/create-research-doc`
 2. `/create-plan-doc`
 3. `/implement-plan`
 4. `/create-work-summary-doc`
-5. `/review-doc` (optional - review research or plan docs using external AI)
+5. `/review-doc`
+6. `/investigate-bug`
 
 For the full flow, each command would build off of the outputs of the previous commands. This helps to keep the agent's context window as free as possible during each step in the process. For example, the idea behind creating such detailed implementation plan documents is that the actual implementation should be very straightforward.
 
@@ -131,9 +133,24 @@ This command is particularly useful after creating research or plan documents to
 - Critically filters the external feedback to identify truly actionable items
 - Presents categorized recommendations (Implement/Consider/Discard) with reasoning
 
+#### 6. `/investigate-bug`
+
+Systematically investigate bugs using the scientific method to identify root causes rather than symptoms.
+
+**What it does:**
+
+- Guides you through systematic hypothesis formation and testing
+- Spawns specialized research agents to gather context about the bug
+- Creates investigation documents in `working-notes/` tracking hypotheses and test results
+- Enforces minimal testing approach (smallest possible change per hypothesis)
+- Records all findings, tests, and conclusions
+- Produces a proposed fix implementation once root cause is identified
+
+**Output:** Investigation document in `working-notes/{date}_bug-investigation_{description}.md`
+
 ### Specialized Agents
 
-The plugin includes seven specialized agents that are automatically invoked by the slash commands:
+The plugin includes nine specialized agents that are automatically invoked by the slash commands:
 
 1. **codebase-locator** - Finds WHERE files, directories, and components live by topic/feature
 2. **codebase-analyzer** - Analyzes HOW code works with precise file:line references and data flow
@@ -142,6 +159,8 @@ The plugin includes seven specialized agents that are automatically invoked by t
 5. **notes-analyzer** - Analyzes notes documents and extracts insights
 6. **web-search-researcher** - Conducts web research for external documentation and resources
 7. **jira-searcher** - Searches Jira for issues and historical context using JQL queries
+8. **git-history** - Searches git history, PRs, and PR comments for implementation context
+9. **frontmatter-generator** - Internal utility that collects git metadata (date/time, commit, branch, repository) for documentation templates
 
 ## Installation
 
@@ -242,7 +261,7 @@ The plugin uses the following directory structure:
 
 ## Workflow Example
 
-Here's a typical workflow using all four commands:
+Here's the main workflow, which uses four commands:
 
 1. **Research the codebase** to understand how a feature works:
 
