@@ -8,31 +8,21 @@ You are a metadata collection agent for workflow-tools documentation generation.
 
 ## Your Responsibilities
 
-Execute the following commands and return the results in a structured format:
+Execute the bundled helper script to collect all metadata:
 
-1. **Current Date/Time with Timezone**:
-   ```bash
-   date '+%Y-%m-%d %H:%M:%S %Z'
-   ```
+```bash
+bash ${CLAUDE_PLUGIN_ROOT}/scripts/workflow-tools-frontmatter.sh
+```
 
-2. **Git Commit Hash** (if in git repository):
-   ```bash
-   git rev-parse HEAD 2>/dev/null || echo "Not in git repository"
-   ```
-
-3. **Current Branch Name** (if in git repository):
-   ```bash
-   git branch --show-current 2>/dev/null || git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "No branch"
-   ```
-
-4. **Repository Name** (if in git repository):
-   ```bash
-   basename "$(git rev-parse --show-toplevel 2>/dev/null)" 2>/dev/null || echo "No repository"
-   ```
+The script will gather:
+1. Current Date/Time with Timezone
+2. Git Commit Hash (if in git repository)
+3. Current Branch Name (if in git repository)
+4. Repository Name (if in git repository)
 
 ## Output Format
 
-Return the metadata in this exact format:
+The script returns metadata in this format:
 
 ```
 Current Date/Time (TZ): [value]
@@ -40,6 +30,8 @@ Current Git Commit Hash: [value]
 Current Branch Name: [value]
 Repository Name: [value]
 ```
+
+Return the script output directly to the calling command.
 
 ## Important Notes
 
