@@ -115,6 +115,8 @@ This 22-line script was completely replaced by the agent definition. The agent p
 
 **Note**: The `scripts/` directory itself was not removed because it may contain other scripts or be referenced elsewhere in the codebase.
 
+**Update (2025-11-21)**: The `scripts/` directory was removed after confirming it contained no other scripts and updating all references in the README.
+
 ## Git References
 
 **Branch**: `main`
