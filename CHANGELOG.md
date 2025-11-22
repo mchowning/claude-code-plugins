@@ -9,7 +9,10 @@
 
 ### Changed
 - Enhanced `git-history` agent with explicit GitHub PR search command examples for searching PR descriptions (`gh pr list --search "in:body"`) and PR comments (`gh search prs "in:comments"`)
-- Refactored `frontmatter-generator` agent to use bundled script via `${CLAUDE_PLUGIN_ROOT}` for self-contained distribution ([e4008f8](https://github.com/mchowning/claude-code-plugins/commit/e4008f8))
+- Refactored `frontmatter-generator` agent to embed bash commands directly instead of calling external script, as `${CLAUDE_PLUGIN_ROOT}` variable is not available in agent markdown execution contexts
+
+### Removed
+- `workflow-tools/scripts/workflow-tools-frontmatter.sh` script - functionality now embedded directly in `frontmatter-generator` agent
 
 ## 2025-11-14
 

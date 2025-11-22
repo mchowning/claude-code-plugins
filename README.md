@@ -415,13 +415,9 @@ Summary documents include:
 - GitHub permalinks to specific code changes
 - Testing and verification approach
 
-## Helper Scripts
+## Metadata Collection
 
-The plugin includes a helper script bundled in the `scripts/` directory:
-
-- **claude-md-frontmatter.sh** - Generates YAML frontmatter with git metadata
-
-This script is automatically referenced using `${CLAUDE_PLUGIN_ROOT}/scripts/` path substitution.
+The plugin includes a specialized `frontmatter-generator` agent that collects git metadata and timestamps for documentation frontmatter. This agent executes bash commands directly (using pre-approved commands like `date`, `git rev-parse`, `git branch`) without requiring external scripts.
 
 ## Best Practices
 
