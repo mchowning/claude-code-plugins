@@ -457,9 +457,9 @@ claude-code-plugins/          # Marketplace root
     │   ├── notes-locator.md
     │   ├── notes-analyzer.md
     │   ├── web-search-researcher.md
-    │   └── jira-searcher.md
-    ├── scripts/              # Helper scripts
-    │   └── claude-md-frontmatter.sh
+    │   ├── jira-searcher.md
+    │   ├── git-history.md
+    │   └── frontmatter-generator.md
     └── CLAUDE.md
 ```
 
