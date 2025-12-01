@@ -134,35 +134,89 @@ Then wait for the user's research query.
      [Any areas that need further investigation]
      ```
 
-7. **Automatic External Review (Internal Quality Check):**
-   - Check for external review environment variable: `bash -c 'echo ${CLAUDE_EXTERNAL_REVIEW_COMMAND:-NOT_SET}'`
-   - **If environment variable IS set:**
-     - Invoke the external review command with the comprehensive review prompt (from review-doc.md step 4) for the just-created research document
-     - **Critically analyze the feedback with a VERY skeptical lens**:
-       - Dismiss theoretical concerns that don't apply to this specific research
-       - Ignore feedback that adds unnecessary complexity
-       - Only identify feedback that reveals genuine gaps or errors
-     - **Silently address ONLY critical issues**:
-       - Fix any factual errors or missing critical information in the document
-       - Add only truly important missing considerations
-       - Make minimal, focused updates - do NOT implement every suggestion
-     - **Do NOT present the review to the user** - this is an internal quality check
-   - **If environment variable is NOT set:**
-     - Skip this step and proceed to adding GitHub permalinks
+7. **REQUIRED: Automatic External Review (MUST RUN BEFORE PRESENTING TO USER):**
 
-8. **Add GitHub permalinks (if applicable):**
+   **CRITICAL**: You MUST run external review before presenting findings to the user in step 9. This is NOT optional. Even if no reviewers are configured, you must check and document that fact.
+
+   **Environment Variable Format**: The `CLAUDE_EXTERNAL_REVIEW_COMMAND` environment variable should contain one or more review commands separated by the delimiter `: ` (colon followed by space). Each command should include everything needed to invoke the model except the actual prompt.
+
+   Examples:
+   - Single reviewer: `CLAUDE_EXTERNAL_REVIEW_COMMAND="opencode --model github-copilot/gpt-5 run"`
+   - Multiple reviewers: `CLAUDE_EXTERNAL_REVIEW_COMMAND="opencode --model github-copilot/gpt-5.1 run: opencode --model github-copilot/gemini-3-pro-preview run"`
+
+   First, define a helper function to extract review commands:
+
+   ```bash
+   get_review_commands() {
+     if [ -z "${CLAUDE_EXTERNAL_REVIEW_COMMAND:-}" ]; then
+       return 1
+     fi
+
+     # Split on ": " delimiter to get individual commands
+     # The format is: "cmd1 run: cmd2 run: cmd3 run"
+     echo "${CLAUDE_EXTERNAL_REVIEW_COMMAND}"
+     return 0
+   }
+   ```
+
+   Then use it to perform sequential reviews:
+
+   ```bash
+   mapfile -t REVIEW_CMDS < <(get_review_commands)
+
+   if [ ${#REVIEW_CMDS[@]} -eq 0 ]; then
+     # Skip to step 8 (no external review configured)
+   else
+     # Sequential review loop - each reviewer sees the updated document
+     for cmd in "${REVIEW_CMDS[@]}"; do
+       # 1. Invoke the external review command with comprehensive review prompt (from review-doc.md step 4)
+       ${cmd} "Review the document at [DOCUMENT_PATH] and provide detailed feedback..."
+
+       # 2. Critically analyze the feedback with a VERY skeptical lens:
+       #    - Dismiss theoretical concerns that don't apply to this specific research
+       #    - Ignore feedback that adds unnecessary complexity
+       #    - Only identify feedback that reveals genuine gaps or errors
+
+       # 3. Silently address ONLY critical issues:
+       #    - Fix any factual errors or missing critical information in the document
+       #    - Add only truly important missing considerations
+       #    - Make minimal, focused updates - do NOT implement every suggestion
+
+       # Next reviewer in the loop will see the updated document
+     done
+
+     # Do NOT present any reviews to the user - this is an internal quality check
+   fi
+   ```
+
+8. **Checkpoint: Verify External Review Completed**
+
+   Before proceeding to present findings, verify:
+   - ✓ External review has been run (or confirmed not configured in step 7)
+   - ✓ Critical issues from review have been fixed
+   - ✓ Document reflects all necessary corrections
+
+   **If you haven't run external review yet, STOP and go back to step 7.**
+
+9. **Add GitHub permalinks (if applicable):**
    - Check if on main branch or if commit is pushed: `git branch --show-current` and `git status`
    - If on main/master or pushed, generate GitHub permalinks:
      - Get repo info: `gh repo view --json owner,name`
      - Create permalinks: `https://github.com/{}/{repo}/blob/{commit}/{file}#L{line}`
    - Replace local file references with permalinks in the document
 
-9. **Present findings:**
-   - Present a concise summary of findings to the user
-   - Include key file references for easy navigation
-   - Ask if they have follow-up questions or need clarification
+10. **Present findings:**
 
-10. **Handle follow-up questions:**
+    **BEFORE presenting, verify you completed external review in step 7.**
+    - If NO: Stop and go back to step 7 immediately
+    - If YES: Proceed to present findings
+
+    Present to the user:
+    - Concise summary of findings
+    - Key file references for easy navigation
+    - Ask if they have follow-up questions or need clarification
+
+11. **Handle follow-up questions:**
    - If the user has follow-up questions, append to the same research document
    - Update the frontmatter fields `last_updated` and `last_updated_by` to reflect the update
    - Add `last_updated_note: "Added follow-up research for [brief description]"` to frontmatter

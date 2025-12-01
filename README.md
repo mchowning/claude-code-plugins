@@ -74,6 +74,7 @@ Compile comprehensive research across the codebase and the internet using parall
 - Discovers relevant notes and documentation
 - Fetches external resources and Jira context
 - Generates timestamped research documents with YAML frontmatter
+- **Automatic quality check:** If `CLAUDE_EXTERNAL_REVIEW_COMMAND` is configured, runs sequential external reviews and silently incorporates critical feedback before presenting the document to you
 
 **Output:** Research document in `working-notes/{date}_research_{topic}.md`
 
@@ -90,6 +91,7 @@ Often you will want to provide a research document from `/create-research-doc` w
 - Presents design options and gathers user feedback iteratively
 - Creates comprehensive implementation plans with success criteria
 - Writes detailed plans to `working-notes/` for later execution
+- **Automatic quality check:** If `CLAUDE_EXTERNAL_REVIEW_COMMAND` is configured, runs sequential external reviews and silently incorporates critical feedback before presenting the plan to you
 
 **Output:** Plan document in `working-notes/{date}_plan_{topic}.md`
 
@@ -128,10 +130,14 @@ This command is particularly useful after creating research or plan documents to
 **What it does:**
 
 - Prompts you to select a document (prioritizes recently created documents)
-- Requires `CLAUDE_EXTERNAL_REVIEW_COMMAND` environment variable (e.g., `"opencode --model github-copilot/gpt-5 run"`)
+- Requires `CLAUDE_EXTERNAL_REVIEW_COMMAND` environment variable
+  - Single reviewer: `"opencode --model github-copilot/gpt-5 run"`
+  - Multiple reviewers: `'["opencode --model github-copilot/gpt-5 run", "opencode --model github-copilot/gemini-3-pro-preview run"]'`
+  - Multiple reviewers run in parallel and their feedback is synthesized into a unified review
 - Sends comprehensive review prompt covering technical accuracy, project alignment, and risk analysis
 - Critically filters the external feedback to identify truly actionable items
 - Presents categorized recommendations (Implement/Consider/Discard) with reasoning
+- Shows common themes and conflicting views when multiple reviewers are used
 
 #### 6. `/investigate-bug`
 
@@ -258,6 +264,38 @@ The plugin uses the following directory structure:
 **No manual configuration is required** - the plugin expects these directories to exist at the project root.
 
 **Recommended:** Add `working-notes/` to your `.gitignore` file since these are temporary research and planning documents. The `notes/` directory should be committed to git as permanent documentation.
+
+### External Review Configuration (Optional)
+
+To enable automatic quality checks for research and plan documents, plus the `/review-doc` command, set the `CLAUDE_EXTERNAL_REVIEW_COMMAND` environment variable:
+
+**Single reviewer:**
+```bash
+export CLAUDE_EXTERNAL_REVIEW_COMMAND="opencode --model github-copilot/gpt-5 run"
+```
+
+**Multiple reviewers (JSON array):**
+```bash
+export CLAUDE_EXTERNAL_REVIEW_COMMAND='["opencode --model github-copilot/gpt-5 run", "opencode --model github-copilot/gemini-3-pro-preview run"]'
+```
+
+**With Nix (in your `home.nix` or similar):**
+```nix
+sessionVariables = {
+  # Single reviewer
+  CLAUDE_EXTERNAL_REVIEW_COMMAND = "opencode --model github-copilot/gpt-5 run";
+
+  # Or multiple reviewers with builtins.toJSON
+  CLAUDE_EXTERNAL_REVIEW_COMMAND = builtins.toJSON [
+    "opencode --model github-copilot/gpt-5 run"
+    "opencode --model github-copilot/gemini-3-pro-preview run"
+  ];
+};
+```
+
+**Behavior:**
+- **create-research-doc** and **create-plan-doc**: Run reviews sequentially (each reviewer sees the document improved by previous reviewers), silently incorporate critical feedback
+- **review-doc**: Run reviews in parallel, synthesize feedback showing common themes and conflicting views
 
 ## Workflow Example
 

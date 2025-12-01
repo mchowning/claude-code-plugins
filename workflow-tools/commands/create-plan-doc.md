@@ -321,26 +321,75 @@ last_updated: [Current date in YYYY-MM-DD format]
 
 ```
 
-### Step 5: Automatic External Review (Internal Quality Check)
+### Step 5: REQUIRED - Automatic External Review (MUST RUN BEFORE PRESENTING TO USER)
 
-1. **Check for external review environment variable:**
-   - Use Bash to check if `CLAUDE_EXTERNAL_REVIEW_COMMAND` environment variable is set: `bash -c 'echo ${CLAUDE_EXTERNAL_REVIEW_COMMAND:-NOT_SET}'`
-   - If the output is "NOT_SET", skip to step 2 (User Review)
-   - If the output contains a command, proceed with internal review
+**CRITICAL**: You MUST run external review before presenting the plan to the user in Step 6. This is NOT optional. Even if no reviewers are configured, you must check and document that fact.
 
-2. **If environment variable IS set - Execute internal quality review:**
-   - Invoke the external review command with the comprehensive review prompt (from review-doc.md step 4) for the just-created plan document
-   - **Critically analyze the feedback with a VERY skeptical lens**:
-     - Dismiss theoretical concerns that don't apply to this specific plan
-     - Ignore feedback that adds unnecessary complexity
-     - Only identify feedback that reveals genuine gaps, errors, or missing critical considerations
-   - **Silently address ONLY critical issues**:
-     - Fix any technical errors or missing critical implementation details
-     - Add only truly important missing considerations
-     - Make minimal, focused updates - do NOT implement every suggestion
-   - **Do NOT present the review to the user** - this is an internal quality check
+**Environment Variable Format**: The `CLAUDE_EXTERNAL_REVIEW_COMMAND` environment variable should contain one or more review commands separated by the delimiter `: ` (colon followed by space). Each command should include everything needed to invoke the model except the actual prompt.
+
+Examples:
+- Single reviewer: `CLAUDE_EXTERNAL_REVIEW_COMMAND="opencode --model github-copilot/gpt-5 run"`
+- Multiple reviewers: `CLAUDE_EXTERNAL_REVIEW_COMMAND="opencode --model github-copilot/gpt-5.1 run: opencode --model github-copilot/gemini-3-pro-preview run"`
+
+First, define a helper function to extract review commands:
+
+```bash
+get_review_commands() {
+  if [ -z "${CLAUDE_EXTERNAL_REVIEW_COMMAND:-}" ]; then
+    return 1
+  fi
+
+  # Split on ": " delimiter to get individual commands
+  # The format is: "cmd1 run: cmd2 run: cmd3 run"
+  echo "${CLAUDE_EXTERNAL_REVIEW_COMMAND}"
+  return 0
+}
+```
+
+Then use it to perform sequential reviews:
+
+```bash
+mapfile -t REVIEW_CMDS < <(get_review_commands)
+
+if [ ${#REVIEW_CMDS[@]} -eq 0 ]; then
+  # Skip to step 6 (User Review)
+else
+  # Sequential review loop - each reviewer sees the updated document
+  for cmd in "${REVIEW_CMDS[@]}"; do
+    # 1. Invoke the external review command with comprehensive review prompt (from review-doc.md step 4)
+    ${cmd} "Review the document at [DOCUMENT_PATH] and provide detailed feedback..."
+
+    # 2. Critically analyze the feedback with a VERY skeptical lens:
+    #    - Dismiss theoretical concerns that don't apply to this specific plan
+    #    - Ignore feedback that adds unnecessary complexity
+    #    - Only identify feedback that reveals genuine gaps, errors, or missing critical considerations
+
+    # 3. Silently address ONLY critical issues:
+    #    - Fix any technical errors or missing critical implementation details
+    #    - Add only truly important missing considerations
+    #    - Make minimal, focused updates - do NOT implement every suggestion
+
+    # Next reviewer in the loop will see the updated document
+  done
+
+  # Do NOT present any reviews to the user - this is an internal quality check
+fi
+```
+
+### Step 5.5: Checkpoint - Verify External Review Completed
+
+Before proceeding to present the plan to the user, verify:
+- ✓ External review has been run (or confirmed not configured in step 5)
+- ✓ Critical issues from review have been fixed
+- ✓ Plan document reflects all necessary corrections
+
+**If you haven't run external review yet, STOP and go back to step 5.**
 
 ### Step 6: User Review
+
+**BEFORE presenting, verify you completed external review in step 5.**
+- If NO: Stop and go back to step 5 immediately
+- If YES: Proceed to present the plan
 
 1. **Present the draft plan location**:
 ```
