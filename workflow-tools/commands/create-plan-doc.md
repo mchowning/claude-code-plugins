@@ -197,7 +197,7 @@ Once aligned on approach:
 
 2. **Share this plan outline with the user and get approval** before writing details
 
-### Step 4: Detailed Plan Writing
+### Step 4: Write Plan Document
 
 After structure approval:
 
@@ -321,77 +321,77 @@ last_updated: [Current date in YYYY-MM-DD format]
 
 ```
 
-### Step 5: REQUIRED - Automatic External Review (MUST RUN BEFORE PRESENTING TO USER)
+### Step 5: Finalize Document Quality
 
-**CRITICAL**: You MUST run external review before presenting the plan to the user in Step 6. This is NOT optional. Even if no reviewers are configured, you must check and document that fact.
+This step must be completed before presenting the document to the user.
 
-**Environment Variable Format**: The `CLAUDE_EXTERNAL_REVIEW_COMMAND` environment variable should contain one or more review commands separated by the delimiter `: ` (colon followed by space). Each command should include everything needed to invoke the model except the actual prompt.
+#### 5.1: Check for External Review Configuration
 
+Check if external review is configured:
+
+```bash
+echo "${CLAUDE_EXTERNAL_REVIEW_COMMAND:-NOT_SET}"
+```
+
+#### 5.2: Run External Review (if configured)
+
+**If the variable shows `NOT_SET` or is empty:**
+- Continue to Step 5.3
+- No further action needed
+
+**If external review IS configured:**
+
+The environment variable contains one or more review commands separated by `: ` (colon-space).
 Examples:
-- Single reviewer: `CLAUDE_EXTERNAL_REVIEW_COMMAND="opencode --model github-copilot/gpt-5 run"`
-- Multiple reviewers: `CLAUDE_EXTERNAL_REVIEW_COMMAND="opencode --model github-copilot/gpt-5.1 run: opencode --model github-copilot/gemini-3-pro-preview run"`
+- Single: `opencode --model github-copilot/gpt-5 run`
+- Multiple: `opencode --model github-copilot/gpt-5 run: opencode --model deepseek/deepseek-v3 run`
 
-First, define a helper function to extract review commands:
+For each review command (process them sequentially):
 
-```bash
-get_review_commands() {
-  if [ -z "${CLAUDE_EXTERNAL_REVIEW_COMMAND:-}" ]; then
-    return 1
-  fi
+1. **Extract the command** (split on `: ` delimiter if multiple)
 
-  # Split on ": " delimiter to get individual commands
-  # The format is: "cmd1 run: cmd2 run: cmd3 run"
-  echo "${CLAUDE_EXTERNAL_REVIEW_COMMAND}"
-  return 0
-}
-```
+2. **Run the external review:**
+   Execute the command with this review prompt:
+   ```bash
+   ${COMMAND} "Review the document at [DOCUMENT_PATH] and provide detailed feedback on:
 
-Then use it to perform sequential reviews:
+   1. Technical accuracy and completeness of the implementation approach
+   2. Alignment with project standards (check CLAUDE.md, package.json, configs, existing patterns)
+   3. Missing technical considerations (error handling, rollback, monitoring, security)
+   4. Missing behavioral considerations (user experience, edge cases, backward compatibility)
+   5. Missing strategic considerations (deployment strategy, maintenance burden, alternative timing)
+   6. Conflicts with established patterns in the codebase
+   7. Risk analysis completeness
+   8. Testing strategy thoroughness
 
-```bash
-mapfile -t REVIEW_CMDS < <(get_review_commands)
+   Be specific about what's missing or incorrect. Cite file paths and line numbers where relevant. Focus on actionable improvements that reduce implementation risk."
+   ```
 
-if [ ${#REVIEW_CMDS[@]} -eq 0 ]; then
-  # Skip to step 6 (User Review)
-else
-  # Sequential review loop - each reviewer sees the updated document
-  for cmd in "${REVIEW_CMDS[@]}"; do
-    # 1. Invoke the external review command with comprehensive review prompt (from review-doc.md step 4)
-    ${cmd} "Review the document at [DOCUMENT_PATH] and provide detailed feedback..."
+3. **Analyze feedback with extreme skepticism:**
+   - Dismiss theoretical concerns that don't apply to this specific context
+   - Ignore feedback that adds unnecessary complexity
+   - Ignore feedback based on false assumptions
+   - **Only identify feedback that reveals GENUINE gaps, errors, or missing CRITICAL considerations**
+   - Most feedback should probably be dismissed
 
-    # 2. Critically analyze the feedback with a VERY skeptical lens:
-    #    - Dismiss theoretical concerns that don't apply to this specific plan
-    #    - Ignore feedback that adds unnecessary complexity
-    #    - Only identify feedback that reveals genuine gaps, errors, or missing critical considerations
+4. **Silently address ONLY critical issues:**
+   - Fix any technical errors
+   - Add only truly important missing considerations
+   - Make minimal, focused updates
+   - **Do NOT implement every suggestion**
+   - Update the document file directly
 
-    # 3. Silently address ONLY critical issues:
-    #    - Fix any technical errors or missing critical implementation details
-    #    - Add only truly important missing considerations
-    #    - Make minimal, focused updates - do NOT implement every suggestion
+5. **If multiple reviewers:** Each subsequent reviewer sees the updated document from the previous review
 
-    # Next reviewer in the loop will see the updated document
-  done
+**Do NOT present reviews to the user** - this is an internal quality check.
 
-  # Do NOT present any reviews to the user - this is an internal quality check
-fi
-```
+#### 5.3: Document Ready for Presentation
 
-### Step 5.5: Checkpoint - Verify External Review Completed
+The plan document has been written and quality-checked. Ready to present to user.
 
-Before proceeding to present the plan to the user, verify:
-- ✓ External review has been run (or confirmed not configured in step 5)
-- ✓ Critical issues from review have been fixed
-- ✓ Plan document reflects all necessary corrections
+### Step 6: Present Plan to User
 
-**If you haven't run external review yet, STOP and go back to step 5.**
-
-### Step 6: User Review
-
-**BEFORE presenting, verify you completed external review in step 5.**
-- If NO: Stop and go back to step 5 immediately
-- If YES: Proceed to present the plan
-
-1. **Present the draft plan location**:
+1. **Present the plan location**:
 ```
 
 I've created the initial implementation plan at:

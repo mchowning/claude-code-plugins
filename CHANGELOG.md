@@ -1,5 +1,17 @@
 # Changelog
 
+## 2025-12-01
+
+### Changed
+- **Improved external review reliability**: Restructured external review steps in all doc-generation commands to make them structurally unavoidable
+  - Changed from sequential steps (easy to skip) to nested substeps within document finalization (required to complete)
+  - Simplified external review instructions by removing complex bash pseudocode in favor of clear procedural steps
+  - Removed redundant checkpoint steps that added noise without fixing structural issues
+  - Updated `/create-plan-doc`: Merged Steps 5, 5.5, 6 into new "Finalize Document Quality" step with substeps
+  - Updated `/create-research-doc`: Consolidated Steps 7, 8 into "Finalize Document Quality" step
+  - **Added external review to `/create-work-summary-doc`**: Previously had no external review step at all
+- External review now embedded as part of completing the document rather than a separate post-completion step
+
 ## 2025-11-21
 
 ### Added

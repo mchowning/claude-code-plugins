@@ -134,89 +134,88 @@ Then wait for the user's research query.
      [Any areas that need further investigation]
      ```
 
-7. **REQUIRED: Automatic External Review (MUST RUN BEFORE PRESENTING TO USER):**
+7. **Finalize Document Quality:**
 
-   **CRITICAL**: You MUST run external review before presenting findings to the user in step 9. This is NOT optional. Even if no reviewers are configured, you must check and document that fact.
+   This step must be completed before presenting findings to the user.
 
-   **Environment Variable Format**: The `CLAUDE_EXTERNAL_REVIEW_COMMAND` environment variable should contain one or more review commands separated by the delimiter `: ` (colon followed by space). Each command should include everything needed to invoke the model except the actual prompt.
+   **7.1: Check for External Review Configuration**
 
+   Check if external review is configured:
+
+   ```bash
+   echo "${CLAUDE_EXTERNAL_REVIEW_COMMAND:-NOT_SET}"
+   ```
+
+   **7.2: Run External Review (if configured)**
+
+   **If the variable shows `NOT_SET` or is empty:**
+   - Continue to Step 7.3
+   - No further action needed
+
+   **If external review IS configured:**
+
+   The environment variable contains one or more review commands separated by `: ` (colon-space).
    Examples:
-   - Single reviewer: `CLAUDE_EXTERNAL_REVIEW_COMMAND="opencode --model github-copilot/gpt-5 run"`
-   - Multiple reviewers: `CLAUDE_EXTERNAL_REVIEW_COMMAND="opencode --model github-copilot/gpt-5.1 run: opencode --model github-copilot/gemini-3-pro-preview run"`
+   - Single: `opencode --model github-copilot/gpt-5 run`
+   - Multiple: `opencode --model github-copilot/gpt-5 run: opencode --model deepseek/deepseek-v3 run`
 
-   First, define a helper function to extract review commands:
+   For each review command (process them sequentially):
 
-   ```bash
-   get_review_commands() {
-     if [ -z "${CLAUDE_EXTERNAL_REVIEW_COMMAND:-}" ]; then
-       return 1
-     fi
+   a. **Extract the command** (split on `: ` delimiter if multiple)
 
-     # Split on ": " delimiter to get individual commands
-     # The format is: "cmd1 run: cmd2 run: cmd3 run"
-     echo "${CLAUDE_EXTERNAL_REVIEW_COMMAND}"
-     return 0
-   }
-   ```
+   b. **Run the external review:**
+      Execute the command with this review prompt:
+      ```bash
+      ${COMMAND} "Review the research document at [DOCUMENT_PATH] and provide detailed feedback on:
 
-   Then use it to perform sequential reviews:
+      1. Factual accuracy and completeness of findings
+      2. Alignment with project architecture and patterns (check CLAUDE.md and codebase)
+      3. Missing connections or relationships between components
+      4. Missing important considerations or context
+      5. Incorrect interpretations of code or architecture
+      6. Missing references or citations (file paths, line numbers)
+      7. Gaps in answering the original research question
 
-   ```bash
-   mapfile -t REVIEW_CMDS < <(get_review_commands)
+      Be specific about what's missing or incorrect. Cite file paths and line numbers where relevant. Focus on actionable improvements."
+      ```
 
-   if [ ${#REVIEW_CMDS[@]} -eq 0 ]; then
-     # Skip to step 8 (no external review configured)
-   else
-     # Sequential review loop - each reviewer sees the updated document
-     for cmd in "${REVIEW_CMDS[@]}"; do
-       # 1. Invoke the external review command with comprehensive review prompt (from review-doc.md step 4)
-       ${cmd} "Review the document at [DOCUMENT_PATH] and provide detailed feedback..."
+   c. **Analyze feedback with extreme skepticism:**
+      - Dismiss theoretical concerns that don't apply to this specific research
+      - Ignore feedback that adds unnecessary complexity
+      - Ignore feedback based on false assumptions
+      - **Only identify feedback that reveals GENUINE gaps, errors, or missing CRITICAL information**
+      - Most feedback should probably be dismissed
 
-       # 2. Critically analyze the feedback with a VERY skeptical lens:
-       #    - Dismiss theoretical concerns that don't apply to this specific research
-       #    - Ignore feedback that adds unnecessary complexity
-       #    - Only identify feedback that reveals genuine gaps or errors
+   d. **Silently address ONLY critical issues:**
+      - Fix any factual errors
+      - Add only truly important missing information
+      - Make minimal, focused updates
+      - **Do NOT implement every suggestion**
+      - Update the document file directly
 
-       # 3. Silently address ONLY critical issues:
-       #    - Fix any factual errors or missing critical information in the document
-       #    - Add only truly important missing considerations
-       #    - Make minimal, focused updates - do NOT implement every suggestion
+   e. **If multiple reviewers:** Each subsequent reviewer sees the updated document from the previous review
 
-       # Next reviewer in the loop will see the updated document
-     done
+   **Do NOT present reviews to the user** - this is an internal quality check.
 
-     # Do NOT present any reviews to the user - this is an internal quality check
-   fi
-   ```
+   **7.3: Document Ready for Presentation**
 
-8. **Checkpoint: Verify External Review Completed**
+   The research document has been written and quality-checked. Ready to present to user.
 
-   Before proceeding to present findings, verify:
-   - ✓ External review has been run (or confirmed not configured in step 7)
-   - ✓ Critical issues from review have been fixed
-   - ✓ Document reflects all necessary corrections
-
-   **If you haven't run external review yet, STOP and go back to step 7.**
-
-9. **Add GitHub permalinks (if applicable):**
+8. **Add GitHub permalinks (if applicable):**
    - Check if on main branch or if commit is pushed: `git branch --show-current` and `git status`
    - If on main/master or pushed, generate GitHub permalinks:
      - Get repo info: `gh repo view --json owner,name`
      - Create permalinks: `https://github.com/{}/{repo}/blob/{commit}/{file}#L{line}`
    - Replace local file references with permalinks in the document
 
-10. **Present findings:**
-
-    **BEFORE presenting, verify you completed external review in step 7.**
-    - If NO: Stop and go back to step 7 immediately
-    - If YES: Proceed to present findings
+9. **Present findings to user:**
 
     Present to the user:
     - Concise summary of findings
     - Key file references for easy navigation
     - Ask if they have follow-up questions or need clarification
 
-11. **Handle follow-up questions:**
+10. **Handle follow-up questions:**
    - If the user has follow-up questions, append to the same research document
    - Update the frontmatter fields `last_updated` and `last_updated_by` to reflect the update
    - Add `last_updated_note: "Added follow-up research for [brief description]"` to frontmatter

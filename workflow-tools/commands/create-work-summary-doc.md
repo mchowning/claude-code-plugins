@@ -206,7 +206,73 @@ function criticalFunction() {
 **Pull Request**: [#123](https://github.com/owner/repo/pull/123) _(if available)_
 ````
 
-### Step 9: Present Summary to User
+### Step 9: Finalize Document Quality
+
+This step must be completed before presenting the document to the user.
+
+#### 9.1: Check for External Review Configuration
+
+Check if external review is configured:
+
+```bash
+echo "${CLAUDE_EXTERNAL_REVIEW_COMMAND:-NOT_SET}"
+```
+
+#### 9.2: Run External Review (if configured)
+
+**If the variable shows `NOT_SET` or is empty:**
+- Continue to Step 9.3
+- No further action needed
+
+**If external review IS configured:**
+
+The environment variable contains one or more review commands separated by `: ` (colon-space).
+Examples:
+- Single: `opencode --model github-copilot/gpt-5 run`
+- Multiple: `opencode --model github-copilot/gpt-5 run: opencode --model deepseek/deepseek-v3 run`
+
+For each review command (process them sequentially):
+
+1. **Extract the command** (split on `: ` delimiter if multiple)
+
+2. **Run the external review:**
+   Execute the command with this review prompt:
+   ```bash
+   ${COMMAND} "Review the implementation summary at [DOCUMENT_PATH] and provide detailed feedback on:
+
+   1. Accuracy of the technical explanation - does it correctly explain what was implemented and why?
+   2. Completeness - are there important changes that were omitted from the summary?
+   3. Clarity - will another developer understand what was done and why from reading this?
+   4. Missing context - are there important decisions, constraints, or rationale that should be documented?
+   5. Factual errors - are there any incorrect statements about what the code does?
+   6. Missing git references - are all relevant commits properly documented?
+
+   Be specific about what's missing or incorrect. Focus on ensuring the summary accurately and completely documents the implementation work."
+   ```
+
+3. **Analyze feedback with extreme skepticism:**
+   - Dismiss theoretical concerns or style suggestions
+   - Ignore feedback that adds unnecessary complexity
+   - Ignore feedback based on false assumptions
+   - **Only identify feedback that reveals GENUINE gaps, errors, or missing CRITICAL information**
+   - Most feedback should probably be dismissed
+
+4. **Silently address ONLY critical issues:**
+   - Fix any factual errors about what was implemented
+   - Add only truly important missing information
+   - Make minimal, focused updates
+   - **Do NOT implement every suggestion**
+   - Update the document file directly
+
+5. **If multiple reviewers:** Each subsequent reviewer sees the updated document from the previous review
+
+**Do NOT present reviews to the user** - this is an internal quality check.
+
+#### 9.3: Document Ready for Presentation
+
+The implementation summary has been written and quality-checked. Ready to present to user.
+
+### Step 10: Present Summary to User
 
 1. **Present the implementation summary:**
 
