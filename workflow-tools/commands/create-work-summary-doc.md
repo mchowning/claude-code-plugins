@@ -35,17 +35,7 @@ With this context plus the git diff, I'll generate an implementation summary.
 
 Then wait for the user's input.
 
-### Step 3: Check for Jira Ticket Number
-
-1. **Check if Jira ticket is mentioned:**
-   - Review the user's response and any referenced documents
-   - Look for Jira ticket numbers (e.g., ABC-1234, PROJ-567)
-   - If a Jira ticket number is found, note it and move to the next step
-   - If NO Jira reference is found, ask: "Is there a Jira ticket associated with this work? If so, please provide the ticket number."
-   - Wait for the user's response
-   - Note: Do not fetch the actual Jira ticket details now. We'll do that later in Step 5
-
-### Step 4: Determine Default Branch and Select Git Diff
+### Step 3: Gather Jira Ticket and Git Diff Scope
 
 1. **Determine the default branch:**
    - Run: `git symbolic-ref refs/remotes/origin/HEAD | sed 's@^refs/remotes/origin/@@'`
@@ -53,29 +43,43 @@ Then wait for the user's input.
    - Use this as the base branch for all subsequent git commands
    - Store this in a variable: `DEFAULT_BRANCH`
 
-2. **Prompt user to select the git diff scope:**
-   Use the AskUserQuestion tool to present these options:
+2. **Gather Jira ticket and git diff scope using AskUserQuestion:**
+   Use the AskUserQuestion tool with two questions:
 
-   ```
-   Which changes should be documented?
-   ```
+   **Question 1 - Jira Ticket:**
+   - question: "Is there a Jira ticket associated with this work?"
+   - header: "Jira ticket"
+   - multiSelect: false
+   - options:
+     - label: "No Jira ticket"
+       description: "This work is not associated with a Jira ticket"
+     - [Input field will be provided automatically for entering ticket number like PROJ-1234]
 
-   Options:
-   - **Changes from `[DEFAULT_BRANCH]` branch** - All changes on this branch since it diverged from `[DEFAULT_BRANCH]`
-   - **Most recent commit** - Only the changes in the latest commit
-   - **Uncommitted changes** - Current uncommitted changes (not recommended)
-   - **[OTHER]** - User provides custom changes that should be considered
+   **Question 2 - Git Diff Scope:**
+   - question: "Which changes should be documented?"
+   - header: "Changes"
+   - multiSelect: false
+   - options:
+     - label: "Changes from [DEFAULT_BRANCH] branch"
+       description: "All changes on this branch since it diverged from [DEFAULT_BRANCH]"
+     - label: "Most recent commit"
+       description: "Only the changes in the latest commit"
+     - label: "Uncommitted changes"
+       description: "Current uncommitted changes (not recommended)"
+     - [Input field will be provided automatically for custom specification]
 
-3. **Execute the appropriate git diff command:**
-   - Diff from default branch: `git diff [DEFAULT_BRANCH]...HEAD`
-   - Most recent commit: `git diff HEAD~1 HEAD`
-   - Uncommitted: `git diff HEAD`
-   - Custom: Determine an appropriate git diff command based on the user's request
+3. **Process the answers:**
+   - Store the Jira ticket answer (either "No Jira ticket" or the ticket number provided)
+   - Execute the appropriate git diff command based on the git diff scope answer:
+     - Changes from default branch: `git diff [DEFAULT_BRANCH]...HEAD`
+     - Most recent commit: `git diff HEAD~1 HEAD`
+     - Uncommitted changes: `git diff HEAD`
+     - Custom: Determine an appropriate git diff command based on the user's input
 
-### Step 5: Gather Context
+### Step 4: Gather Context
 
 1. **Fetch Jira ticket details (if applicable):**
-   - If a Jira ticket number was identified in Step 3:
+   - If a Jira ticket number was provided in Step 3:
      - Use the `workflow-tools:jira-searcher` agent to fetch ticket details: "Get details for Jira ticket [TICKET-NUMBER]"
      - Extract key information: summary, description, acceptance criteria, comments
      - Use this as additional context for understanding what was implemented and why
@@ -85,25 +89,28 @@ Then wait for the user's input.
    - If plan documents provided: Read them FULLY (no limit/offset parameters)
    - Extract key context about what was being implemented and why
 
-### Step 6: Gather Git Metadata
+### Step 5: Gather Git Metadata
 
-1. **Collect comprehensive git metadata:**
+1. **Collect frontmatter metadata using the agent:**
+   - Use the `workflow-tools:frontmatter-generator` agent to collect metadata. Wait for the agent to return metadata before proceeding.
+   - This provides: date/time, git commit hash, branch name, and repository info
+   - Store this for use in frontmatter and throughout the document
+
+2. **Collect comprehensive git metadata:**
    Run these commands to gather commit information:
-   - Current branch: `git branch --show-current`
    - Commit history for the range: `git log --oneline --no-decorate <range>`
    - Detailed commit info: `git log --format="%H%n%an%n%ae%n%aI%n%s%n%b" <range>`
    - Check if PR exists: `gh pr view --json number,url` (may not exist yet)
    - Get base commit: `git merge-base [DEFAULT_BRANCH] HEAD`
-   - Repository info: `gh repo view --json owner,name`
    - Jira ticket info (if provided earlier)
 
-2. **Determine commit range context:**
+3. **Determine commit range context:**
    - Identify the base commit (where branch diverged)
-   - Identify the head commit (current or latest)
-   - Note the branch name
+   - Identify the head commit (current or latest, from frontmatter-generator)
+   - Note the branch name (from frontmatter-generator)
    - Capture all commit hashes in the range (they may change on force-push, but provide context)
 
-### Step 7: Analyze Changes
+### Step 6: Analyze Changes
 
 1. **Analyze the git diff:**
    - Understand what files changed
@@ -111,33 +118,32 @@ Then wait for the user's input.
    - Connect changes to the context from research/plan docs (if provided)
    - Focus on understanding WHY these changes accomplish the goals
 
-### Step 8: Find GitHub Permalinks (if applicable)
+### Step 7: Find GitHub Permalinks (if applicable)
 
 1. **Obtain GitHub permalinks:**
    - Check if commits are pushed: `git branch -r --contains HEAD`
    - If pushed, or if on main branch:
-     - Get repo info: `gh repo view --json owner,name`
+     - Use repository info from frontmatter-generator (Step 5.1)
      - Get GitHub permalinks for all commits (i.e., `https://github.com/{owner}/{repo}/blob/{commit}`)
 
-### Step 9: Generate Implementation Summary
+### Step 8: Generate Implementation Summary
 
-1. **Gather metadata for the document:**
-   - Use the `workflow-tools:frontmatter-generator` agent to collect metadata. Wait for the agent to return metadata before proceeding.
-   - Use `date '+%Y-%m-%d'` for the filename timestamp
-   - Create descriptive filename: `notes/YYYY-MM-DD_descriptive-name.md`.
+1. **Prepare the document filename:**
+   - Use the date from frontmatter-generator (Step 5.1) to extract YYYY-MM-DD for the filename
+   - Create descriptive filename: `notes/YYYY-MM-DD_descriptive-name.md`
 
 2. **Write the implementation summary using this strict template:**
 
 ````markdown
 ---
-date: [Current date and time with timezone in ISO format]
-git_commit: [Current commit hash]
-branch: [Current branch name]
-repository: [Repository name]
-jira_ticket: "[TICKET-NUMBER]" # Optional - include if applicable
+date: [Use date from frontmatter-generator (Step 5.1)]
+git_commit: [Use git_commit from frontmatter-generator (Step 5.1)]
+branch: [Use branch from frontmatter-generator (Step 5.1)]
+repository: [Use repository from frontmatter-generator (Step 5.1)]
+jira_ticket: "[TICKET-NUMBER]" # Optional - include if Jira ticket provided in Step 3
 topic: "[Feature/Task Name]"
 tags: [implementation, relevant-component-names]
-last_updated: [Current date in YYYY-MM-DD format]
+last_updated: [Extract YYYY-MM-DD from frontmatter date field]
 ---
 
 # [Feature/Task Name]
@@ -200,7 +206,7 @@ function criticalFunction() {
 **Pull Request**: [#123](https://github.com/owner/repo/pull/123) _(if available)_
 ````
 
-### Step 10: Present Summary to User
+### Step 9: Present Summary to User
 
 1. **Present the implementation summary:**
 
@@ -276,15 +282,15 @@ The implementation summary is complete when:
 
 - [ ] Jira ticket checked for and fetched (if applicable)
 - [ ] Default branch determined dynamically
+- [ ] Frontmatter metadata collected via frontmatter-generator agent (date, commit, branch, repository)
 - [ ] All relevant research/plan documents have been read fully
 - [ ] Git diff has been analyzed thoroughly
-- [ ] All git metadata collected (commits, messages, branch, range, PR if available, Jira ticket)
+- [ ] All git metadata collected (commit history, messages, commit range, PR if available, Jira ticket)
 - [ ] Document follows strict three-level template
 - [ ] Summary section is 1-3 sentences
 - [ ] Overview section is high-level and readable
 - [ ] Technical Details explain WHY, not just WHAT
 - [ ] Git References section includes all commits with full messages
-- [ ] GitHub permalinks included (if applicable)
-- [ ] Frontmatter generated via frontmatter-generator agent
+- [ ] GitHub permalinks included (if applicable) using repository info from frontmatter-generator
 - [ ] File saved to `notes/YYYY-MM-DD_descriptive-name.md`
 - [ ] Document is standalone (no references to research/plan docs)
