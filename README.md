@@ -164,7 +164,7 @@ The plugin includes nine specialized agents that are automatically invoked by th
 4. **notes-locator** - Discovers relevant notes/documents in `working-notes/` and `notes/`
 5. **notes-analyzer** - Analyzes notes documents and extracts insights
 6. **web-search-researcher** - Conducts web research for external documentation and resources
-7. **jira-searcher** - Searches Jira for issues and historical context using JQL queries
+7. **jira** - Searches Jira for issues and historical context, creates work items
 8. **git-history** - Searches git history, PRs, and PR comments for implementation context
 9. **frontmatter-generator** - Internal utility that collects git metadata (date/time, commit, branch, repository) for documentation templates
 
@@ -176,7 +176,7 @@ The plugin requires these external tools to be installed:
 
 - `git` - Version control
 - `gh` - GitHub CLI (for GitHub permalinks and repo information)
-- `acli` - Atlassian CLI (optional, required for Jira integration via jira-searcher agent)
+- `acli` - Atlassian CLI (optional, required for Jira integration via jira agent)
 
 ### Installation from GitHub
 
@@ -495,7 +495,7 @@ claude-code-plugins/          # Marketplace root
     │   ├── notes-locator.md
     │   ├── notes-analyzer.md
     │   ├── web-search-researcher.md
-    │   ├── jira-searcher.md
+    │   ├── jira.md
     │   ├── git-history.md
     │   └── frontmatter-generator.md
     └── CLAUDE.md

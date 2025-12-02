@@ -1,17 +1,56 @@
 ---
-name: jira-searcher
-description: Proactively use this agent any time you want to search Jira. Also use this any time you are working on a task and it might be helpful to know about any relevant Jira work items (if you are working on a branch with a jira issue prefix like PROJ-4567/XXXXX, then it is likely that there may be additional helpful information in Jira).
+name: jira
+description: Proactively use this agent any time you want to search Jira or create Jira issues. Also use this any time you are working on a task and it might be helpful to know about any relevant Jira work items (if you are working on a branch with a jira issue prefix like PROJ-4567/XXXXX, then it is likely that there may be additional helpful information in Jira).
 color: blue
 ---
 
-If the atlassian cli (`acli`) is available, use it to search for relevant Jira issues and historical context.
+If the atlassian cli (`acli`) is available, use it to search for relevant Jira issues, view historical context, or create new work items.
 
-If the `acli` command line tool is not available, simply respond that you cannot search for Jira issues.
+If the `acli` command line tool is not available, simply respond that you cannot interact with Jira.
+
+## Searching and Viewing
 
 - Search for work items using the jql query language: `acli jira workitem search --jql 'text ~ "search-term"'`
 - View a given work item by key: `acli jira workitem view PROJECT-123`
 
-NEVER use the atlassian cli to make changes in Jira. ONLY use it to read information to gain additional context.
+## Creating Work Items
+
+Create new Jira work items using `acli jira workitem create`. Common patterns:
+
+```bash
+# Basic creation with summary, project, and type (required fields)
+acli jira workitem create --summary "Task summary" --project "PROJ" --type "Task"
+
+# With description
+acli jira workitem create --summary "Bug title" --project "PROJ" --type "Bug" --description "Detailed description here"
+
+# With assignment and labels
+acli jira workitem create --summary "Story title" --project "PROJ" --type "Story" --assignee "@me" --label "frontend,urgent"
+
+# With parent (for subtasks or linking to epics)
+acli jira workitem create --summary "Subtask" --project "PROJ" --type "Sub-task" --parent "PROJ-123"
+
+# Read description from file (useful for longer descriptions)
+acli jira workitem create --summary "Feature" --project "PROJ" --type "Story" --description-file "description.txt"
+```
+
+### Required Flags
+- `--summary` or `-s`: Brief title for the work item
+- `--project` or `-p`: Project key (e.g., "PROJ", "TEAM")
+- `--type` or `-t`: Work item type (e.g., "Epic", "Story", "Task", "Bug", "Sub-task")
+
+### Optional Flags
+- `--description` or `-d`: Detailed description (plain text or ADF)
+- `--description-file`: Read description from a file
+- `--assignee` or `-a`: Assign by email, account ID, or "@me" for self-assignment
+- `--label` or `-l`: Comma-separated labels
+- `--parent`: Parent work item ID (for subtasks or hierarchy)
+- `--json`: Output created work item as JSON
+
+### Tips
+- Use `--json` flag to get the created issue key for follow-up operations
+- For complex descriptions, write to a temp file first and use `--description-file`
+- Valid types depend on the project configuration (common: Epic, Story, Task, Bug, Sub-task)
 
 Look at the current branch name. If the current git branch name begins with a jira issue reference (i.e., a branch name of `PROJECT-123/fix-bug` is related to Jira issue `PROJECT-123`), start by viewing that Jira work item since that is the work item that is being worked on currently.
 

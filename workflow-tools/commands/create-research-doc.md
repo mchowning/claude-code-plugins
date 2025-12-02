@@ -45,7 +45,7 @@ Then wait for the user's research query.
    - Instruct the agent to return LINKS with their findings, and please INCLUDE those links in your final report
 
    **For historical context:**
-   - Use the `workflow-tools:jira-searcher` agent to search for relevant Jira issues that may provide business context
+   - Use the `workflow-tools:jira` agent to search for relevant Jira issues that may provide business context
    - Use the `workflow-tools:git-history` agent to search git history, PRs, and PR comments for implementation context and technical decisions
 
    The key is to use these agents intelligently:

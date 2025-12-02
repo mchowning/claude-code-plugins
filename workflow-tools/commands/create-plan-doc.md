@@ -65,7 +65,7 @@ When this command is invoked:
         ```
       - Wait for the user's input before proceeding
 
-If a Jira ticket number is given, use the `workflow-tools:jira-searcher` agent to get information about the ticket.
+If a Jira ticket number is given, use the `workflow-tools:jira` agent to get information about the ticket.
 
 ## Process Steps
 

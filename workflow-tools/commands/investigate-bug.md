@@ -29,7 +29,7 @@ Every bug tells a story. Your job is to uncover the true root cause of the bug a
    - Instruct the agent to return LINKS with their findings, and please INCLUDE those links in your final report and for it to read any reference implementation completely
 
    **For historical context:**
-   - Use the `workflow-tools:jira-searcher` agent to search for relevant Jira issues that may provide business context
+   - Use the `workflow-tools:jira` agent to search for relevant Jira issues that may provide business context
    - Use the `workflow-tools:git-history` agent to search git history, PRs, and PR comments for implementation context and technical decisions
 
    The key is to use these agents intelligently:

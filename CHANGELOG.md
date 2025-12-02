@@ -1,5 +1,14 @@
 # Changelog
 
+## 2025-12-02
+
+### Changed
+- Renamed `jira-searcher` agent to `jira` to reflect expanded capabilities
+- Enhanced `jira` agent with work item creation capability using `acli jira workitem create`
+  - Added comprehensive documentation for create command with examples
+  - Documented required flags (summary, project, type) and optional flags (description, assignee, labels, parent)
+  - Agent now supports both searching/viewing and creating Jira work items
+
 ## 2025-12-01
 
 ### Changed
