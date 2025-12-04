@@ -4,49 +4,23 @@ You are tasked with creating comprehensive implementation summaries that documen
 
 ## Process Steps
 
-### Step 1: Check for Uncommitted Code
+### Step 1: Gather User Input
 
-**Check for uncommitted code changes:**
+**CRITICAL: Use `AskUserQuestion` IMMEDIATELY as your FIRST action. Do not run any bash commands or other processing before asking the user these questions.**
 
-- Run `git status` to check for uncommitted changes
-- Filter out documentation files (files in `working-notes/`, `notes/`, or ending in `.md`)
-- If there are uncommitted CODE changes:
+1. **Gather context, Jira ticket, and git diff scope using AskUserQuestion:**
+   Use the AskUserQuestion tool with THREE questions:
 
-  ```
-  You have uncommitted code changes. Consider committing your work before generating implementation documentation.
+   **Question 1 - Context Documents:**
+   - question: "Do you have research or plan documents to provide context?"
+   - header: "Context"
+   - multiSelect: false
+   - options:
+     - label: "No documents"
+       description: "Generate summary from git diff and Jira only"
+     - [Input field will be provided automatically for entering document paths]
 
-  Uncommitted changes:
-  [list the uncommitted code files]
-  ```
-
-- STOP and wait for the user to prompt you to proceed
-
-### Step 2: Present Initial Prompt
-
-Respond with:
-
-```
-I'll help you document the implementation work. This will create a comprehensive summary explaining what was changed and why.
-
-Please provide any research or plan documents that were used and/or a brief description or the relevant Jira ticket.
-
-With this context plus the git diff, I'll generate an implementation summary.
-```
-
-Then wait for the user's input.
-
-### Step 3: Gather Jira Ticket and Git Diff Scope
-
-1. **Determine the default branch:**
-   - Run: `git symbolic-ref refs/remotes/origin/HEAD | sed 's@^refs/remotes/origin/@@'`
-   - This will return the default branch name (e.g., "main", "master", "carbon_ubuntu")
-   - Use this as the base branch for all subsequent git commands
-   - Store this in a variable: `DEFAULT_BRANCH`
-
-2. **Gather Jira ticket and git diff scope using AskUserQuestion:**
-   Use the AskUserQuestion tool with two questions:
-
-   **Question 1 - Jira Ticket:**
+   **Question 2 - Jira Ticket:**
    - question: "Is there a Jira ticket associated with this work?"
    - header: "Jira ticket"
    - multiSelect: false
@@ -55,31 +29,53 @@ Then wait for the user's input.
        description: "This work is not associated with a Jira ticket"
      - [Input field will be provided automatically for entering ticket number like PROJ-1234]
 
-   **Question 2 - Git Diff Scope:**
+   **Question 3 - Git Diff Scope:**
    - question: "Which changes should be documented?"
    - header: "Changes"
    - multiSelect: false
    - options:
-     - label: "Changes from [DEFAULT_BRANCH] branch"
-       description: "All changes on this branch since it diverged from [DEFAULT_BRANCH]"
+     - label: "Changes from default branch"
+       description: "All changes on this branch since it diverged from the default branch"
      - label: "Most recent commit"
        description: "Only the changes in the latest commit"
      - label: "Uncommitted changes"
        description: "Current uncommitted changes (not recommended)"
      - [Input field will be provided automatically for custom specification]
 
-3. **Process the answers:**
+2. **Store the answers:**
+   - Store the context documents answer (either "No documents" or the document paths provided)
    - Store the Jira ticket answer (either "No Jira ticket" or the ticket number provided)
-   - Execute the appropriate git diff command based on the git diff scope answer:
-     - Changes from default branch: `git diff [DEFAULT_BRANCH]...HEAD`
-     - Most recent commit: `git diff HEAD~1 HEAD`
-     - Uncommitted changes: `git diff HEAD`
-     - Custom: Determine an appropriate git diff command based on the user's input
+   - Store the git diff scope answer for processing in the next step
 
-### Step 4: Gather Context
+### Step 2: Check Prerequisites and Prepare Git Context
+
+1. **Determine the default branch:**
+   - Run: `git symbolic-ref refs/remotes/origin/HEAD | sed 's@^refs/remotes/origin/@@'`
+   - This will return the default branch name (e.g., "main", "master", "carbon_ubuntu")
+   - Store this as `DEFAULT_BRANCH`
+
+2. **Check for uncommitted code changes:**
+   - Run `git status` to check for uncommitted changes
+   - Filter out documentation files (files in `working-notes/`, `notes/`, or ending in `.md`)
+   - If there are uncommitted CODE changes:
+     ```
+     You have uncommitted code changes. Consider committing your work before generating implementation documentation.
+
+     Uncommitted changes:
+     [list the uncommitted code files]
+     ```
+   - STOP and wait for the user to prompt you to proceed
+
+3. **Execute the git diff command based on user's answer:**
+   - Changes from default branch: `git diff [DEFAULT_BRANCH]...HEAD`
+   - Most recent commit: `git diff HEAD~1 HEAD`
+   - Uncommitted changes: `git diff HEAD`
+   - Custom: Determine an appropriate git diff command based on the user's input
+
+### Step 3: Gather Context
 
 1. **Fetch Jira ticket details (if applicable):**
-   - If a Jira ticket number was provided in Step 3:
+   - If a Jira ticket number was provided in Step 1:
      - Use the `workflow-tools:jira` agent to fetch ticket details: "Get details for Jira ticket [TICKET-NUMBER]"
      - Extract key information: summary, description, acceptance criteria, comments
      - Use this as additional context for understanding what was implemented and why
@@ -89,7 +85,7 @@ Then wait for the user's input.
    - If plan documents provided: Read them FULLY (no limit/offset parameters)
    - Extract key context about what was being implemented and why
 
-### Step 5: Gather Git Metadata
+### Step 4: Gather Git Metadata
 
 1. **Collect frontmatter metadata using the agent:**
    - Use the `workflow-tools:frontmatter-generator` agent to collect metadata. Wait for the agent to return metadata before proceeding.
@@ -110,7 +106,7 @@ Then wait for the user's input.
    - Note the branch name (from frontmatter-generator)
    - Capture all commit hashes in the range (they may change on force-push, but provide context)
 
-### Step 6: Analyze Changes
+### Step 5: Analyze Changes
 
 1. **Analyze the git diff:**
    - Understand what files changed
@@ -118,29 +114,29 @@ Then wait for the user's input.
    - Connect changes to the context from research/plan docs (if provided)
    - Focus on understanding WHY these changes accomplish the goals
 
-### Step 7: Find GitHub Permalinks (if applicable)
+### Step 6: Find GitHub Permalinks (if applicable)
 
 1. **Obtain GitHub permalinks:**
    - Check if commits are pushed: `git branch -r --contains HEAD`
    - If pushed, or if on main branch:
-     - Use repository info from frontmatter-generator (Step 5.1)
+     - Use repository info from frontmatter-generator (Step 4.1)
      - Get GitHub permalinks for all commits (i.e., `https://github.com/{owner}/{repo}/blob/{commit}`)
 
-### Step 8: Generate Implementation Summary
+### Step 7: Generate Implementation Summary
 
 1. **Prepare the document filename:**
-   - Use the date from frontmatter-generator (Step 5.1) to extract YYYY-MM-DD for the filename
+   - Use the date from frontmatter-generator (Step 4.1) to extract YYYY-MM-DD for the filename
    - Create descriptive filename: `notes/YYYY-MM-DD_descriptive-name.md`
 
 2. **Write the implementation summary using this strict template:**
 
 ````markdown
 ---
-date: [Use date from frontmatter-generator (Step 5.1)]
-git_commit: [Use git_commit from frontmatter-generator (Step 5.1)]
-branch: [Use branch from frontmatter-generator (Step 5.1)]
-repository: [Use repository from frontmatter-generator (Step 5.1)]
-jira_ticket: "[TICKET-NUMBER]" # Optional - include if Jira ticket provided in Step 3
+date: [Use date from frontmatter-generator (Step 4.1)]
+git_commit: [Use git_commit from frontmatter-generator (Step 4.1)]
+branch: [Use branch from frontmatter-generator (Step 4.1)]
+repository: [Use repository from frontmatter-generator (Step 4.1)]
+jira_ticket: "[TICKET-NUMBER]" # Optional - include if Jira ticket provided in Step 1
 topic: "[Feature/Task Name]"
 tags: [implementation, relevant-component-names]
 last_updated: [Extract YYYY-MM-DD from frontmatter date field]
@@ -206,11 +202,11 @@ function criticalFunction() {
 **Pull Request**: [#123](https://github.com/owner/repo/pull/123) _(if available)_
 ````
 
-### Step 9: Finalize Document Quality
+### Step 8: Finalize Document Quality
 
 This step must be completed before presenting the document to the user.
 
-#### 9.1: Check for External Review Configuration
+#### 8.1: Check for External Review Configuration
 
 Check if external review is configured:
 
@@ -218,10 +214,10 @@ Check if external review is configured:
 echo "${CLAUDE_EXTERNAL_REVIEW_COMMAND:-NOT_SET}"
 ```
 
-#### 9.2: Run External Review (if configured)
+#### 8.2: Run External Review (if configured)
 
 **If the variable shows `NOT_SET` or is empty:**
-- Continue to Step 9.3
+- Continue to Step 8.3
 - No further action needed
 
 **If external review IS configured:**
@@ -268,11 +264,11 @@ For each review command (process them sequentially):
 
 **Do NOT present reviews to the user** - this is an internal quality check.
 
-#### 9.3: Document Ready for Presentation
+#### 8.3: Document Ready for Presentation
 
 The implementation summary has been written and quality-checked. Ready to present to user.
 
-### Step 10: Present Summary to User
+### Step 9: Present Summary to User
 
 1. **Present the implementation summary:**
 
@@ -312,10 +308,9 @@ I've created the implementation summary at: `notes/YYYY-MM-DD_descriptive-name.m
 
 5. **Uncommitted Code Warning**:
 
-- Always check for uncommitted code FIRST
+- Check for uncommitted code after gathering user input (Step 2)
 - Only check for uncommitted CODE files, not documentation files
-- Stop immediately if uncommitted code exists
-- Advise committing before proceeding
+- Stop and advise committing before proceeding if uncommitted code exists
 
 6. **Read Documentation Fully**:
 
