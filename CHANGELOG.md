@@ -1,5 +1,12 @@
 # Changelog
 
+## 2025-12-04
+
+### Changed
+- Renamed `jira` agent back to `jira-searcher` and removed work item creation capability
+  - Jira ticket creation functionality moved to separate `jira-ticket-creator` agent outside this plugin
+  - `jira-searcher` agent now focuses solely on searching and viewing Jira work items
+
 ## 2025-12-02
 
 ### Changed

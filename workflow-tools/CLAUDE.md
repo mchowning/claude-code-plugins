@@ -22,5 +22,5 @@ The plugin includes eight specialized agents that are automatically invoked by c
 - **notes-locator** - Discovers relevant notes/documents in `working-notes/`
 - **notes-analyzer** - Deeply analyzes notes documents and extracts insights
 - **web-search-researcher** - Conducts web research for external documentation
-- **jira** - Searches Jira for issues and business context, creates work items
+- **jira** - Searches Jira for issues and business context
 - **git-history** - Searches git history, PRs, and PR comments for implementation context

@@ -164,7 +164,7 @@ The plugin includes nine specialized agents that are automatically invoked by th
 4. **notes-locator** - Discovers relevant notes/documents in `working-notes/` and `notes/`
 5. **notes-analyzer** - Analyzes notes documents and extracts insights
 6. **web-search-researcher** - Conducts web research for external documentation and resources
-7. **jira** - Searches Jira for issues and historical context, creates work items
+7. **jira-searcher** - Searches Jira for issues and historical context
 8. **git-history** - Searches git history, PRs, and PR comments for implementation context
 9. **frontmatter-generator** - Internal utility that collects git metadata (date/time, commit, branch, repository) for documentation templates
 
@@ -270,16 +270,19 @@ The plugin uses the following directory structure:
 To enable automatic quality checks for research and plan documents, plus the `/review-doc` command, set the `CLAUDE_EXTERNAL_REVIEW_COMMAND` environment variable:
 
 **Single reviewer:**
+
 ```bash
 export CLAUDE_EXTERNAL_REVIEW_COMMAND="opencode --model github-copilot/gpt-5 run"
 ```
 
 **Multiple reviewers (JSON array):**
+
 ```bash
 export CLAUDE_EXTERNAL_REVIEW_COMMAND='["opencode --model github-copilot/gpt-5 run", "opencode --model github-copilot/gemini-3-pro-preview run"]'
 ```
 
 **With Nix (in your `home.nix` or similar):**
+
 ```nix
 sessionVariables = {
   # Single reviewer
@@ -294,6 +297,7 @@ sessionVariables = {
 ```
 
 **Behavior:**
+
 - **create-research-doc** and **create-plan-doc**: Run reviews sequentially (each reviewer sees the document improved by previous reviewers), silently incorporate critical feedback
 - **review-doc**: Run reviews in parallel, synthesize feedback showing common themes and conflicting views
 
@@ -495,7 +499,7 @@ claude-code-plugins/          # Marketplace root
     │   ├── notes-locator.md
     │   ├── notes-analyzer.md
     │   ├── web-search-researcher.md
-    │   ├── jira.md
+    │   ├── jira-searcher.md
     │   ├── git-history.md
     │   └── frontmatter-generator.md
     └── CLAUDE.md
