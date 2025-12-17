@@ -201,7 +201,7 @@ Once aligned on approach:
 
 After structure approval:
 
-1. Use the `workflow-tools:frontmatter-generator` agent to collect metadata. Wait for the agent to return metadata before proceeding.
+1. Run the frontmatter script: `${CLAUDE_PLUGIN_ROOT}/skills/frontmatter/workflow-tools-frontmatter.sh`
 2. **Write the plan** to `working-notes/{YYYY-MM-DD}_plan_[descriptive-name].md`. Use `date '%Y-%m-%d'` for the timestamp in the filename
 3. **Use this template structure**:
 

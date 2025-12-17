@@ -88,7 +88,7 @@ You are tasked with creating comprehensive implementation summaries that documen
 ### Step 4: Gather Git Metadata
 
 1. **Collect frontmatter metadata using the agent:**
-   - Use the `workflow-tools:frontmatter-generator` agent to collect metadata. Wait for the agent to return metadata before proceeding.
+   - Run the frontmatter script: `${CLAUDE_PLUGIN_ROOT}/skills/frontmatter/workflow-tools-frontmatter.sh`
    - This provides: date/time, git commit hash, branch name, and repository info
    - Store this for use in frontmatter and throughout the document
 
@@ -343,7 +343,7 @@ The implementation summary is complete when:
 
 - [ ] Jira ticket checked for and fetched (if applicable)
 - [ ] Default branch determined dynamically
-- [ ] Frontmatter metadata collected via frontmatter-generator agent (date, commit, branch, repository)
+- [ ] Frontmatter metadata collected via frontmatter script (date, commit, branch, repository)
 - [ ] All relevant research/plan documents have been read fully
 - [ ] Git diff has been analyzed thoroughly
 - [ ] All git metadata collected (commit history, messages, commit range, PR if available, Jira ticket)

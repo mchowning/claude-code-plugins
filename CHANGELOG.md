@@ -1,5 +1,16 @@
 # Changelog
 
+## 2025-12-12
+
+### Changed
+- Replaced `frontmatter-generator` agent with skill-based shell script for faster, cheaper, and more deterministic metadata collection
+  - Created `skills/frontmatter/SKILL.md` with skill definition
+  - Created `skills/frontmatter/workflow-tools-frontmatter.sh` script for direct execution
+  - Updated `/create-research-doc`, `/create-plan-doc`, and `/create-work-summary-doc` to call script directly
+
+### Removed
+- `workflow-tools/agents/frontmatter-generator.md` agent - replaced by skill-based approach
+
 ## 2025-12-04
 
 ### Changed

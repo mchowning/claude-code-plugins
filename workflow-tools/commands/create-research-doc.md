@@ -67,8 +67,7 @@ Then wait for the user's research query.
 
 5. **Gather metadata for the research document:**
    - Filename: `working-notes/{YYYY-MM-DD}_research_[descriptive-name].md`. Use `date '+%Y-%m-%d'` for the timestamp in the filename.
-   - Use the `workflow-tools:frontmatter-generator` agent to collect metadata.
-   - Wait for the agent to return metadata before proceeding.
+   - Run the frontmatter script: `${CLAUDE_PLUGIN_ROOT}/skills/frontmatter/workflow-tools-frontmatter.sh`
 
 6. **Generate research document:**
    - Use the metadata gathered in the previous step
