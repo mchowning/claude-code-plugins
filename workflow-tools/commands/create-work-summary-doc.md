@@ -39,7 +39,7 @@ You are tasked with creating comprehensive implementation summaries that documen
      - label: "Most recent commit"
        description: "Only the changes in the latest commit"
      - label: "Uncommitted changes"
-       description: "Current uncommitted changes (not recommended)"
+       description: "Current uncommitted changes (will omit Git References section)"
      - [Input field will be provided automatically for custom specification]
 
 2. **Store the answers:**
@@ -54,17 +54,19 @@ You are tasked with creating comprehensive implementation summaries that documen
    - This will return the default branch name (e.g., "main", "master", "carbon_ubuntu")
    - Store this as `DEFAULT_BRANCH`
 
-2. **Check for uncommitted code changes:**
-   - Run `git status` to check for uncommitted changes
-   - Filter out documentation files (files in `working-notes/`, `notes/`, or ending in `.md`)
-   - If there are uncommitted CODE changes:
-     ```
-     You have uncommitted code changes. Consider committing your work before generating implementation documentation.
+2. **Check for uncommitted code changes (skip if user chose "Uncommitted changes"):**
+   - If the user explicitly chose "Uncommitted changes" in Step 1, skip this check entirely
+   - Otherwise:
+     - Run `git status` to check for uncommitted changes
+     - Filter out documentation files (files in `working-notes/`, `notes/`, or ending in `.md`)
+     - If there are uncommitted CODE changes:
+       ```
+       You have uncommitted code changes. Consider committing your work before generating implementation documentation.
 
-     Uncommitted changes:
-     [list the uncommitted code files]
-     ```
-   - STOP and wait for the user to prompt you to proceed
+       Uncommitted changes:
+       [list the uncommitted code files]
+       ```
+     - STOP and wait for the user to prompt you to proceed
 
 3. **Execute the git diff command based on user's answer:**
    - Changes from default branch: `git diff [DEFAULT_BRANCH]...HEAD`
@@ -86,6 +88,14 @@ You are tasked with creating comprehensive implementation summaries that documen
    - Extract key context about what was being implemented and why
 
 ### Step 4: Gather Git Metadata
+
+**For uncommitted changes:** Only collect basic metadata:
+1. Run the frontmatter script: `${CLAUDE_PLUGIN_ROOT}/skills/frontmatter/workflow-tools-frontmatter.sh`
+2. Note that `git_commit` will be the current HEAD, not the uncommitted changes themselves
+3. Store the branch name and repository info
+4. Skip commit history collection (there are no commits to document)
+
+**For committed changes:** Collect full metadata:
 
 1. **Collect frontmatter metadata using the agent:**
    - Run the frontmatter script: `${CLAUDE_PLUGIN_ROOT}/skills/frontmatter/workflow-tools-frontmatter.sh`
@@ -116,6 +126,10 @@ You are tasked with creating comprehensive implementation summaries that documen
 
 ### Step 6: Find GitHub Permalinks (if applicable)
 
+**Skip this step entirely for uncommitted changes.**
+
+For committed changes:
+
 1. **Obtain GitHub permalinks:**
    - Check if commits are pushed: `git branch -r --contains HEAD`
    - If pushed, or if on main branch:
@@ -132,10 +146,10 @@ You are tasked with creating comprehensive implementation summaries that documen
 
 ````markdown
 ---
-date: [Use date from frontmatter-generator (Step 4.1)]
-git_commit: [Use git_commit from frontmatter-generator (Step 4.1)]
-branch: [Use branch from frontmatter-generator (Step 4.1)]
-repository: [Use repository from frontmatter-generator (Step 4.1)]
+date: [Use date from frontmatter-generator (Step 4)]
+git_commit: [Use git_commit from frontmatter-generator (Step 4)] # Omit this field for uncommitted changes
+branch: [Use branch from frontmatter-generator (Step 4)]
+repository: [Use repository from frontmatter-generator (Step 4)]
 jira_ticket: "[TICKET-NUMBER]" # Optional - include if Jira ticket provided in Step 1
 topic: "[Feature/Task Name]"
 tags: [implementation, relevant-component-names]
@@ -184,6 +198,12 @@ function criticalFunction() {
 
 ## Git References
 
+<!-- FOR UNCOMMITTED CHANGES: Use this simplified section -->
+**Branch**: `[branch-name]`
+
+**Status**: Uncommitted changes
+
+<!-- FOR COMMITTED CHANGES: Use this full section instead -->
 **Branch**: `[branch-name]`
 
 **Commit Range**: `[base-commit-hash]...[head-commit-hash]`
@@ -200,6 +220,7 @@ function criticalFunction() {
 [Continue for all commits in the range...]
 
 **Pull Request**: [#123](https://github.com/owner/repo/pull/123) _(if available)_
+<!-- END CONDITIONAL SECTION -->
 ````
 
 ### Step 8: Finalize Document Quality
@@ -343,15 +364,15 @@ The implementation summary is complete when:
 
 - [ ] Jira ticket checked for and fetched (if applicable)
 - [ ] Default branch determined dynamically
-- [ ] Frontmatter metadata collected via frontmatter script (date, commit, branch, repository)
+- [ ] Frontmatter metadata collected via frontmatter script (date, branch, repository; commit only for committed changes)
 - [ ] All relevant research/plan documents have been read fully
 - [ ] Git diff has been analyzed thoroughly
-- [ ] All git metadata collected (commit history, messages, commit range, PR if available, Jira ticket)
+- [ ] All git metadata collected (skip commit history for uncommitted changes)
 - [ ] Document follows strict three-level template
 - [ ] Summary section is 1-3 sentences
 - [ ] Overview section is high-level and readable
 - [ ] Technical Details explain WHY, not just WHAT
-- [ ] Git References section includes all commits with full messages
-- [ ] GitHub permalinks included (if applicable) using repository info from frontmatter-generator
+- [ ] Git References section appropriate for change type (simplified for uncommitted, full for committed)
+- [ ] GitHub permalinks included (if applicable, skip for uncommitted changes)
 - [ ] File saved to `notes/YYYY-MM-DD_descriptive-name.md`
 - [ ] Document is standalone (no references to research/plan docs)
