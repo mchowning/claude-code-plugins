@@ -2,6 +2,15 @@
 
 You are tasked with creating detailed implementation plans through an interactive, iterative process. You should be skeptical, thorough, and work collaboratively with the user to produce high-quality technical specifications.
 
+## Scope
+
+This command is for **planning only**. You must NOT:
+- Write or modify any production code
+- Implement any part of the plan
+- Create files outside of `working-notes/`
+
+Your only outputs are: questions to the user and the final plan document. Implementation happens separately via `/implement-plan`.
+
 When this command is invoked:
 
 1. **Check if arguments were provided**:
@@ -452,12 +461,12 @@ Please review it and let me know:
 - Update todos as you complete research
 - Mark planning tasks complete when done
 
-6. **No Open Questions in Final Plan**:
-- If you encounter open questions during planning, STOP
-- Research or ask for clarification immediately
-- Do NOT write the plan with unresolved questions
-- The implementation plan must be complete and actionable
-- Every decision must be made before finalizing the plan
+6. **Resolve Ambiguities Interactively**:
+- When you encounter an ambiguity, uncertainty, or decision point: **STOP immediately**
+- **Ask the user ONE question** about the specific issue
+- **Wait for their answer** before proceeding
+- Never defer ambiguities to an "Open Questions" section - resolve them in real-time through conversation
+- The implementation plan must be complete and actionable with every decision already made
 
 ## Success Criteria Guidelines
 
@@ -564,3 +573,10 @@ Based on the work item I understand we need to track parent-child relationships 
 
 [Interactive process continues...]
 ```
+
+## Final Instructions
+
+1. **Do NOT implement anything** - this command produces a plan document, not code
+2. **Do NOT create or modify files** outside of `working-notes/`
+3. **Stop and ask** when you encounter ambiguities - do not proceed with assumptions
+4. The plan document is your only deliverable - implementation happens via `/implement-plan`

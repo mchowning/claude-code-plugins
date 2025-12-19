@@ -2,6 +2,15 @@
 
 You are tasked with conducting comprehensive research across the codebase to answer user questions by spawning parallel sub-agents and synthesizing their findings.
 
+## Scope
+
+This command is for **research and documentation only**. You must NOT:
+- Write or modify any production code
+- Create new files outside of `working-notes/`
+- Implement any solutions discovered during research
+
+Your only outputs are: questions to the user and the final research document.
+
 ## Initial Setup:
 
 When this command is invoked, if you already think you know what the user wants to research, confirm that with the user. If you do not know, respond with:
@@ -11,6 +20,24 @@ I'm ready to research the codebase. Please provide your research question or are
 ```
 
 Then wait for the user's research query.
+
+## Handling Ambiguities
+
+When you encounter an ambiguity, uncertainty, or decision point during research:
+
+1. **STOP immediately** - do not continue researching with assumptions
+2. **Ask the user ONE question** about the specific ambiguity
+3. **Wait for their answer** before proceeding
+4. **Incorporate their answer** into your research direction
+
+Examples of when to stop and ask:
+- The research could go in multiple directions and you're unsure which matters
+- You found conflicting information and don't know which is authoritative
+- The scope is unclear - should you include related area X?
+- A technical detail requires domain knowledge you don't have
+- You're uncertain about the user's intent or what they're trying to accomplish
+
+**The final document should have ZERO open questions** - all ambiguities must be resolved through conversation before generating the document.
 
 ## Steps to follow after receiving the research query:
 
@@ -128,9 +155,9 @@ Then wait for the user's research query.
 
      [Links to past research documents in `working-notes/`]
 
-     ## Open Questions
+     ## Future Research Directions
 
-     [Any areas that need further investigation]
+     [Optional: Areas outside the current scope that could be explored in follow-up research]
      ```
 
 7. **Finalize Document Quality:**
@@ -250,3 +277,10 @@ Then wait for the user's research query.
   - Update frontmatter when adding follow-up research
   - Use snake_case for multi-word field names (e.g., `last_updated`, `git_commit`)
   - Tags should be relevant to the research topic and components studied
+
+## Final Instructions
+
+1. **Do NOT implement anything** - this command produces a research document, not code
+2. **Do NOT create or modify files** outside of `working-notes/`
+3. **Stop and ask** when you encounter ambiguities - do not proceed with assumptions
+4. The research document is your only deliverable
