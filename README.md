@@ -44,7 +44,11 @@ This repository is a marketplace for Claude Code plugins. It currently contains 
 
 ## Workflow Tools Plugin
 
-The Workflow Tools plugin provides six commands that work together with specialized research agents. The full flow from start to finish is:
+The Workflow Tools plugin provides six commands that work together with specialized research agents.
+
+**Design Philosophy:** This workflow is designed to be powerful yet simple enough to easily understand and modify. As frontier AI models improve rapidly, having a straightforward system means you can easily evolve your workflow to take advantage of new capabilities rather than being locked into complex, opaque tooling.
+
+The full flow from start to finish is:
 
 1. `/create-research-doc`
 2. `/create-plan-doc`
@@ -508,6 +512,8 @@ claude-code-plugins/          # Marketplace root
 ## Acknowledgments
 
 This plugin takes significant inspiration from the Human Layer team's excellent Claude Code setup, particularly their approach to structured workflow commands and research agents. Check out their setup at [humanlayer/humanlayer/.claude/commands](https://github.com/humanlayer/humanlayer/tree/main/.claude).
+
+For a great introduction to the ideas behind this workflow, watch [this video](https://www.youtube.com/watch?v=rmvDxxNubIg) from Devin (dexhorthy) of the Human Layer team.
 
 ## License
 

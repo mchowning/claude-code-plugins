@@ -219,6 +219,12 @@ last_updated: [Current date in YYYY-MM-DD format]
 
 # [Feature/Task Name] Implementation Plan
 
+## Checklist [to be checked off as the phases are completed]
+
+- [ ] Phase 1: [Descriptive Name]
+- [ ] Phase 2: [Descriptive Name]
+- [ ] Phase 3: [Descriptive Name]
+
 ## Overview
 
 [Brief description of what we're implementing and why]
