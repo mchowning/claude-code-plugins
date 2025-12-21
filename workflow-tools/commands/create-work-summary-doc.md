@@ -6,12 +6,27 @@ You are tasked with creating comprehensive implementation summaries that documen
 
 ### Step 1: Gather User Input
 
-**CRITICAL: Use `AskUserQuestion` IMMEDIATELY as your FIRST action. Do not run any bash commands or other processing before asking the user these questions.**
+**CRITICAL: Before running any bash commands, gather all required information. First check if the user already provided information, then only ask about missing pieces.**
 
-1. **Gather context, Jira ticket, and git diff scope using AskUserQuestion:**
-   Use the AskUserQuestion tool with THREE questions:
+1. **Analyze the user's prompt for pre-provided information:**
 
-   **Question 1 - Context Documents:**
+   Check the user's initial prompt for each of these three pieces of information:
+
+   | Information | How to Detect |
+   |-------------|---------------|
+   | **Context documents** | File paths like `working-notes/*.md`, `plans/*.md`, or explicit references like "using the plan at..." |
+   | **Jira ticket** | Pattern matching `[A-Z]+-[0-9]+` (e.g., `PROJ-1234`, `ABC-567`) |
+   | **Git diff scope** | Keywords: "default branch", "from main", "from master", "most recent commit", "last commit", "uncommitted changes", or a custom git range |
+
+   Store any detected values for use in later steps.
+
+2. **Ask only about missing information:**
+
+   If ALL three pieces of information were provided in the user's prompt, skip to step 3.
+
+   Otherwise, use `AskUserQuestion` with ONLY the questions for information that was NOT detected:
+
+   **Question - Context Documents** (only if not detected):
    - question: "Do you have research or plan documents to provide context?"
    - header: "Context"
    - multiSelect: false
@@ -20,7 +35,7 @@ You are tasked with creating comprehensive implementation summaries that documen
        description: "Generate summary from git diff and Jira only"
      - [Input field will be provided automatically for entering document paths]
 
-   **Question 2 - Jira Ticket:**
+   **Question - Jira Ticket** (only if not detected):
    - question: "Is there a Jira ticket associated with this work?"
    - header: "Jira ticket"
    - multiSelect: false
@@ -29,7 +44,7 @@ You are tasked with creating comprehensive implementation summaries that documen
        description: "This work is not associated with a Jira ticket"
      - [Input field will be provided automatically for entering ticket number like PROJ-1234]
 
-   **Question 3 - Git Diff Scope:**
+   **Question - Git Diff Scope** (only if not detected):
    - question: "Which changes should be documented?"
    - header: "Changes"
    - multiSelect: false
@@ -42,10 +57,10 @@ You are tasked with creating comprehensive implementation summaries that documen
        description: "Current uncommitted changes (will omit Git References section)"
      - [Input field will be provided automatically for custom specification]
 
-2. **Store the answers:**
-   - Store the context documents answer (either "No documents" or the document paths provided)
-   - Store the Jira ticket answer (either "No Jira ticket" or the ticket number provided)
-   - Store the git diff scope answer for processing in the next step
+3. **Store all values:**
+   - Store the context documents (detected from prompt, answered by user, or "No documents")
+   - Store the Jira ticket (detected from prompt, answered by user, or "No Jira ticket")
+   - Store the git diff scope (detected from prompt or answered by user)
 
 ### Step 2: Check Prerequisites and Prepare Git Context
 

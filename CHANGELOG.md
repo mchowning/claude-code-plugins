@@ -1,5 +1,14 @@
 # Changelog
 
+## 2025-12-21
+
+### Changed
+- `/create-work-summary-doc` now detects pre-provided information (context docs, Jira ticket, git scope) from the user's prompt and only asks about missing pieces
+  - If user provides a Jira ticket like `PROJ-1234`, the command skips asking about Jira
+  - If user specifies "from default branch" or "last commit", the command skips asking about git scope
+  - If user references document paths, the command skips asking about context documents
+  - If all information is provided upfront, `AskUserQuestion` is skipped entirely
+
 ## 2025-12-12
 
 ### Changed
