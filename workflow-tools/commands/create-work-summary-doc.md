@@ -2,15 +2,17 @@
 
 You are tasked with creating comprehensive implementation summaries that document completed work. These summaries capture what was changed and why, serving as permanent documentation for future developers and AI coding agent instances.
 
+**Arguments:** $ARGUMENTS
+
 ## Process Steps
 
 ### Step 1: Gather User Input
 
 **CRITICAL: Before running any bash commands, gather all required information. First check if the user already provided information, then only ask about missing pieces.**
 
-1. **Analyze the user's prompt for pre-provided information:**
+1. **Analyze `$ARGUMENTS` and user's prompt for pre-provided information:**
 
-   Check the user's initial prompt for each of these three pieces of information:
+   Check `$ARGUMENTS` above and the user's initial prompt for each of these three pieces of information:
 
    | Information | How to Detect |
    |-------------|---------------|

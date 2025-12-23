@@ -1,11 +1,13 @@
 You are tasked with obtaining external review of a document.
 
+**Arguments:** $ARGUMENTS
+
 Follow these specific steps:
 
-1. **Check if arguments were provided**:
-   - If the user provided a reference to a specific document to be removed, skip the default message below.
+1. **Check if arguments were provided** (see `$ARGUMENTS` above):
+   - If `$ARGUMENTS` contains a reference to a specific document, skip the default message below.
 
-2. **If no arguments were provided**, respond with:
+2. **If `$ARGUMENTS` is empty**, respond with:
 
 Use the AskUserQuestion tool to present these options:
 

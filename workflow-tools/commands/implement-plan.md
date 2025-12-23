@@ -4,7 +4,9 @@ You are tasked with implementing an approved technical plan from `working-notes/
 
 ## Getting Started
 
-When given a plan path:
+**Arguments:** $ARGUMENTS
+
+When given a plan path (in `$ARGUMENTS` above):
 
 - Read the plan completely and check for any existing checkmarks (- [x])
 - Read the original ticket and all files mentioned in the plan
@@ -13,7 +15,7 @@ When given a plan path:
 - Create a todo list to track your progress
 - Start implementing if you understand what needs to be done
 
-If no plan path provided:
+If `$ARGUMENTS` is empty (no plan path provided):
 
 1. Find the 2 most recently edited plan documents:
    ```bash

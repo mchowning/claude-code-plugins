@@ -11,10 +11,12 @@ This command is for **planning only**. You must NOT:
 
 Your only outputs are: questions to the user and the final plan document. Implementation happens separately via `/implement-plan`.
 
+**Arguments:** $ARGUMENTS
+
 When this command is invoked:
 
-1. **Check if arguments were provided**:
-   - If the provided file paths, ticket references, or task descriptions, skip the default message below
+1. **Check if arguments were provided** (see `$ARGUMENTS` above):
+   - If `$ARGUMENTS` is not empty and contains file paths, ticket references, or task descriptions, skip the default message below
    - Look for:
      - File paths (e.g., `working-notes/...`, `notes/...`)
      - @-mentions of files (e.g., `@working-notes/...`)
@@ -23,7 +25,7 @@ When this command is invoked:
    - Immediately read any provided files FULLY (without using limit/offset)
    - Begin the research process
 
-2. **If no arguments were provided**, first check for existing documents:
+2. **If `$ARGUMENTS` is empty**, first check for existing documents:
 
    a. **Find recent documents**:
       - Use Bash to find the 2 most recently edited documents: `ls -t working-notes/*.md 2>/dev/null | head -2`
