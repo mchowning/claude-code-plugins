@@ -431,6 +431,12 @@ Please review it and let me know:
 
 3. **Continue refining** until the user is satisfied
 
+4. **When the user approves the plan**:
+   - Confirm the plan document is complete and ready for implementation
+   - Remind them: "To begin implementation, use `/implement-plan [path-to-plan]`"
+   - **STOP HERE** - do not proceed with any implementation
+   - Your work on this command is complete
+
 ## Important Guidelines
 
 1. **Be Skeptical**:
@@ -582,3 +588,5 @@ Based on the work item I understand we need to track parent-child relationships 
 2. **Do NOT create or modify files** outside of `working-notes/`
 3. **Stop and ask** when you encounter ambiguities - do not proceed with assumptions
 4. The plan document is your only deliverable - implementation happens via `/implement-plan`
+5. **When the user approves the plan, your task is COMPLETE** - do not continue to implementation
+6. **After approval, explicitly direct the user** to run `/implement-plan` with the plan path
