@@ -284,3 +284,5 @@ Examples of when to stop and ask:
 2. **Do NOT create or modify files** outside of `working-notes/`
 3. **Stop and ask** when you encounter ambiguities - do not proceed with assumptions
 4. The research document is your only deliverable
+
+$ARGUMENTS

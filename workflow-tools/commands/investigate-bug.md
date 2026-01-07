@@ -88,3 +88,5 @@ Update the bug investigation document with the proposed fix implementation.
 - NEVER update the research file to say that a test worked unless the user has confirmed the results of the test.
 - If a hypothesis is found to be incorrect, STOP and re-consider the data to determine if we should modify or add to our remaining hypotheses.
 - NEVER try to fix the bug without first testing the simplest hypothesis possible. Our goal is not to fix the bug as quickly as possible, but instead to slowly and systematically PROVE what the bug is.
+
+$ARGUMENTS
