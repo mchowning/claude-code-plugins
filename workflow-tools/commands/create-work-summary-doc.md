@@ -314,6 +314,35 @@ The implementation summary has been written and quality-checked. Ready to presen
 I've created the implementation summary at: `notes/YYYY-MM-DD_descriptive-name.md`
 ```
 
+### Step 10: Commit the Implementation Summary
+
+1. **Stage and commit the summary document:**
+   - Use `git add` with the specific file path (never use `-A` or `.`)
+   - Create a commit with a message that:
+     - Uses imperative mood
+     - Focuses on "why" - this documents the implementation work
+     - References the feature/task name from the summary
+   - Example commit message format:
+     ```
+     Add implementation summary for [Feature/Task Name]
+
+     Documents the changes made for [brief description of what was implemented].
+     ```
+
+2. **Execute the commit:**
+   ```bash
+   git add notes/YYYY-MM-DD_descriptive-name.md
+   git commit -m "$(cat <<'EOF'
+   Add implementation summary for [Feature/Task Name]
+
+   [Brief description of what the summary documents]
+   EOF
+   )"
+   ```
+
+3. **Show the result:**
+   - Run `git log --oneline -n 1` to confirm the commit was created
+
 ## Important Guidelines
 
 1. **Document Standalone Nature**:
@@ -393,3 +422,4 @@ The implementation summary is complete when:
 - [ ] GitHub permalinks included (if applicable, skip for uncommitted changes)
 - [ ] File saved to `notes/YYYY-MM-DD_descriptive-name.md`
 - [ ] Document is standalone (no references to research/plan docs)
+- [ ] Implementation summary committed to git
