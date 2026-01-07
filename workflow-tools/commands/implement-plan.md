@@ -98,6 +98,36 @@ If the plan has existing checkmarks:
 
 Remember: You're implementing a solution, not just checking boxes. Keep the end goal in mind and maintain forward momentum.
 
-## Keep the Plan Documented Updated
+## Keep Documentation Updated
 
-As you make progress, update the plan document with what you have done. The plan document is a living document that should always be kept up-to-date.
+As you implement, keep documentation accurate and useful. This includes both the plan itself and any project documentation affected by your changes.
+
+### The Plan Document
+
+Update the plan document with your progress. Check off completed items, note any deviations from the original plan, and document decisions made during implementation.
+
+### Project Documentation
+
+Before starting each phase, identify markdown files that might need updates based on the changes you're about to make. Common places to check:
+
+- README.md - setup instructions, usage examples, feature descriptions
+- CLAUDE.md files - project structure, build commands, conventions
+- API documentation - endpoint descriptions, parameters, response formats
+- Architecture docs - system design, component relationships
+
+Use glob or grep to find relevant .md files if you're unsure what documentation exists.
+
+### When to Update Documentation
+
+Update docs after completing each phase, not just at the end. Specifically, update documentation when:
+
+- Adding new features, commands, or APIs
+- Changing existing behavior or interfaces
+- Modifying file structure or directory organization
+- Deprecating or removing functionality
+
+### Keep Updates Proportional
+
+Documentation updates should match the scope of changes. A small bug fix rarely needs doc changes. A new feature needs its usage documented. Think about what would help someone understand the changes you've made.
+
+Focus on accuracy - remove or update outdated information rather than just adding new content. Stale documentation is worse than no documentation.
