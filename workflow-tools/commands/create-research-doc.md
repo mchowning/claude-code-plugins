@@ -21,6 +21,22 @@ I'm ready to research the codebase. Please provide your research question or are
 
 Then wait for the user's research query.
 
+## Intent Clarification
+
+If the user's research goal was **not** provided in the command arguments, ask about it before proceeding:
+- "What are you trying to understand or accomplish with this research?"
+
+If the research goal **was** provided, proceed directly to research unless something in the goal statement is ambiguous or prompts clarifying questions about:
+- **Scope & Depth** - e.g., "Should this be a high-level overview or deep implementation dive?"
+- **Context** - e.g., "Are there specific components to focus on or exclude?"
+- **Output Intent** - e.g., "How will you use the findings?"
+
+### Guidelines
+
+- Only ask questions if genuinely needed to understand the research goal
+- **Use the AskUserQuestion tool** with predefined answer options when asking - this saves typing and presents questions clearly
+- If the goal is clear, skip straight to research
+
 ## Handling Ambiguities
 
 When you encounter an ambiguity, uncertainty, or decision point during research:
@@ -39,7 +55,7 @@ Examples of when to stop and ask:
 
 **The final document should have ZERO open questions** - all ambiguities must be resolved through conversation before generating the document.
 
-## Steps to follow after receiving the research query:
+## Steps to Execute Research (after interview):
 
 1. **Read any directly mentioned files first:**
    - If the user mentions specific files (tickets, docs, JSON), read them FULLY first
@@ -280,9 +296,10 @@ Examples of when to stop and ask:
 
 ## Final Instructions
 
-1. **Do NOT implement anything** - this command produces a research document, not code
-2. **Do NOT create or modify files** outside of `working-notes/`
-3. **Stop and ask** when you encounter ambiguities - do not proceed with assumptions
-4. The research document is your only deliverable
+1. **Conduct the interview first** - understand research goals before spawning agents
+2. **Do NOT implement anything** - this command produces a research document, not code
+3. **Do NOT create or modify files** outside of `working-notes/`
+4. **Stop and ask** when you encounter ambiguities - do not proceed with assumptions
+5. The research document is your only deliverable
 
 $ARGUMENTS
