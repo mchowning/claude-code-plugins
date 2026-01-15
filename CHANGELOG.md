@@ -6,6 +6,7 @@
 - Renamed `/review-doc` command to `/external-review` for clarity
 - Refactored command to use shell script (`scripts/external-review.sh`) for parallel review execution
 - Added `disable-model-invocation: true` frontmatter to prevent automatic invocation—command must be explicitly invoked by user
+- `/implement-plan` now explicitly requires updating the plan document when deviating from it
 
 ### Added
 - `scripts/external-review.sh` - Shell script for running external AI reviews in parallel

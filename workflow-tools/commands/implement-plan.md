@@ -38,7 +38,7 @@ If `$ARGUMENTS` is empty (no plan path provided):
 
 Plans are carefully designed, but reality can be messy. Your job is to:
 
-- Follow the plan's intent while adapting to what you find
+- Follow the plan's intent while adapting to what you find, BUT update the plan when you deviate from it.
 - Implement each phase fully before moving to the next
 - Verify your work makes sense in the broader codebase context
 - Update checkboxes in the plan as you complete sections
