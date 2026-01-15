@@ -1,5 +1,43 @@
 # Changelog
 
+## 2026-01-15
+
+### Changed
+- Renamed `/review-doc` command to `/external-review` for clarity
+- Refactored command to use shell script (`scripts/external-review.sh`) for parallel review execution
+- Added `disable-model-invocation: true` frontmatter to prevent automatic invocation—command must be explicitly invoked by user
+
+### Added
+- `scripts/external-review.sh` - Shell script for running external AI reviews in parallel
+
+### Removed
+- `commands/review-doc.md` - Replaced by `commands/external-review.md`
+
+## 2026-01-08
+
+### Changed
+- `/create-research-doc` now includes intent clarification phase
+  - Asks about research goal only if not provided in arguments
+  - Only asks clarifying questions if goal statement is ambiguous
+  - Lighter-touch approach that defers research methodology to agent
+
+## 2026-01-07
+
+### Changed
+- `/implement-plan` now includes comprehensive documentation update guidance
+  - Identifies affected markdown files (README, CLAUDE.md, API docs, etc.)
+  - Guidance on when and how to update documentation proportionally
+- `/create-work-summary-doc` now auto-commits the generated summary document
+- `/create-plan-doc` now explicitly stops at plan approval instead of starting implementation
+  - Directs users to use `/implement-plan` for execution
+- Added `$ARGUMENTS` variable to `/create-research-doc` and `/investigate-bug` for additional context
+
+## 2025-12-23
+
+### Changed
+- Extended `$ARGUMENTS` detection to `/create-plan-doc`, `/implement-plan`, and `/review-doc`
+  - Commands now skip redundant questions when information is provided upfront
+
 ## 2025-12-21
 
 ### Changed
@@ -8,6 +46,23 @@
   - If user specifies "from default branch" or "last commit", the command skips asking about git scope
   - If user references document paths, the command skips asking about context documents
   - If all information is provided upfront, `AskUserQuestion` is skipped entirely
+
+## 2025-12-19
+
+### Changed
+- `/create-research-doc` and `/create-plan-doc` now resolve ambiguities interactively
+  - Added Scope sections to prevent Claude from implementing instead of documenting
+  - Ambiguities resolved via one-at-a-time questions rather than deferring to "Open Questions"
+  - Renamed "Open Questions" to "Future Research Directions" in templates
+- Added design philosophy section and Human Layer video link to README
+
+## 2025-12-18
+
+### Changed
+- Improved uncommitted changes support in `/create-work-summary-doc`
+  - Removed "(not recommended)" label for uncommitted changes option
+  - Skip commit history collection when user explicitly chose uncommitted changes
+  - Simplified Git References section for uncommitted changes (just branch + status)
 
 ## 2025-12-12
 

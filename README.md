@@ -11,7 +11,7 @@ This repository is a marketplace for Claude Code plugins. It currently contains 
     - [2. `/create-plan-doc`](#2-create-plan-doc)
     - [3. `/implement-plan`](#3-implement-plan)
     - [4. `/create-work-summary-doc`](#4-create-work-summary-doc)
-    - [5. `/review-doc`](#5-review-doc)
+    - [5. `/external-review`](#5-external-review)
     - [6. `/investigate-bug`](#6-investigate-bug)
   - [Specialized Agents](#specialized-agents)
 - [Installation](#installation)
@@ -54,7 +54,7 @@ The full flow from start to finish is:
 2. `/create-plan-doc`
 3. `/implement-plan`
 4. `/create-work-summary-doc`
-5. `/review-doc`
+5. `/external-review`
 6. `/investigate-bug`
 
 For the full flow, each command would build off of the outputs of the previous commands. This helps to keep the agent's context window as free as possible during each step in the process. For example, the idea behind creating such detailed implementation plan documents is that the actual implementation should be very straightforward.
@@ -125,9 +125,9 @@ Generate comprehensive implementation summaries documenting what changed and why
 
 **Output:** Summary document in `notes/{date}_{topic}.md`
 
-#### 5. `/review-doc`
+#### 5. `/external-review`
 
-Obtain external review of research or plan documents using another AI model for a fresh perspective.
+Obtain external review of research or plan documents using another AI model for a fresh perspective. This command must be explicitly invoked—Claude will not trigger it automatically.
 
 This command is particularly useful after creating research or plan documents to identify blind spots, missing considerations, or technical issues before proceeding to implementation.
 
@@ -271,7 +271,7 @@ The plugin uses the following directory structure:
 
 ### External Review Configuration (Optional)
 
-To enable automatic quality checks for research and plan documents, plus the `/review-doc` command, set the `CLAUDE_EXTERNAL_REVIEW_COMMAND` environment variable:
+To enable automatic quality checks for research and plan documents, plus the `/external-review` command, set the `CLAUDE_EXTERNAL_REVIEW_COMMAND` environment variable:
 
 **Single reviewer:**
 
@@ -303,7 +303,7 @@ sessionVariables = {
 **Behavior:**
 
 - **create-research-doc** and **create-plan-doc**: Run reviews sequentially (each reviewer sees the document improved by previous reviewers), silently incorporate critical feedback
-- **review-doc**: Run reviews in parallel, synthesize feedback showing common themes and conflicting views
+- **external-review**: Run reviews in parallel, synthesize feedback showing common themes and conflicting views
 
 ## Workflow Example
 
@@ -495,7 +495,11 @@ claude-code-plugins/          # Marketplace root
     │   ├── create-research-doc.md
     │   ├── create-plan-doc.md
     │   ├── implement-plan.md
-    │   └── create-work-summary-doc.md
+    │   ├── create-work-summary-doc.md
+    │   ├── external-review.md
+    │   └── investigate-bug.md
+    ├── scripts/              # Shell scripts
+    │   └── external-review.sh
     ├── agents/               # Specialized agents
     │   ├── codebase-locator.md
     │   ├── codebase-analyzer.md
