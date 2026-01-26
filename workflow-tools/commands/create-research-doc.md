@@ -1,3 +1,8 @@
+---
+name: workflow-tools:create-research-doc
+description: Conduct comprehensive codebase research by spawning parallel sub-agents and synthesizing findings into a documented report.
+---
+
 # Research Codebase
 
 You are tasked with conducting comprehensive research across the codebase to answer user questions by spawning parallel sub-agents and synthesizing their findings.

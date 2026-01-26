@@ -1,3 +1,8 @@
+---
+name: workflow-tools:implement-plan
+description: Execute an approved technical plan from working-notes with TDD methodology and progress tracking.
+---
+
 # Implement Plan
 
 You are tasked with implementing an approved technical plan from `working-notes/`. These plans contain phases with specific changes and success criteria.

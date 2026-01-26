@@ -1,4 +1,5 @@
 ---
+name: workflow-tools:review-code
 description: Get external AI review of code changes or implementation plans. Runs GPT and Gemini in parallel for diverse perspectives.
 allowed-tools:
   - Bash(${CLAUDE_PLUGIN_ROOT}/scripts/review.sh *)

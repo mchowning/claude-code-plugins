@@ -1,3 +1,8 @@
+---
+name: workflow-tools:investigate-bug
+description: Systematically investigate bugs using the scientific method to identify root causes, not just symptoms.
+---
+
 Every bug tells a story. Your job is to uncover the true root cause of the bug and identify why the root cause happened. You are not interested in band-aids or workarounds that only address they symptoms. We will use the scientific method to systematically isolate and identify the root cause. Ultrathink
 
 **CRITICAL:** Keep a record of your hypotheses and test results in `working-notes/YYYY-MM-DD_bug-investigation_[descriptive name].md`. This should include each hypothesis, what specifically you did to test the hypothesis, and what was the result of the test, and any proposed fixes for the bug.

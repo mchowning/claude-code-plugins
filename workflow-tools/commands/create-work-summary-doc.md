@@ -1,3 +1,8 @@
+---
+name: workflow-tools:create-work-summary-doc
+description: Create comprehensive implementation summaries documenting completed work, capturing what was changed and why.
+---
+
 # Summarize Work
 
 You are tasked with creating comprehensive implementation summaries that document completed work. These summaries capture what was changed and why, serving as permanent documentation for future developers and AI coding agent instances.
