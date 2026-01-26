@@ -338,73 +338,27 @@ last_updated: [Current date in YYYY-MM-DD format]
 
 ```
 
-### Step 5: Finalize Document Quality
+### Step 5: External Review
 
-This step must be completed before presenting the document to the user.
+Run the `/review-code` command to get external AI review of the plan document:
 
-#### 5.1: Check for External Review Configuration
-
-Check if external review is configured:
-
-```bash
-echo "${CLAUDE_EXTERNAL_REVIEW_COMMAND:-NOT_SET}"
+```
+/review-code [path-to-plan-document]
 ```
 
-#### 5.2: Run External Review (if configured)
+This will:
+1. Send the plan to GPT 5.2 and Gemini 3 Pro for review
+2. Synthesize their feedback with critical evaluation
+3. Present a summary of high-confidence issues and recommendations
 
-**If the variable shows `NOT_SET` or is empty:**
-- Continue to Step 5.3
-- No further action needed
+**After reviewing the feedback:**
 
-**If external review IS configured:**
+1. **Critically evaluate** each recommendation - not all feedback is valid
+2. **Silently address** only issues that reveal genuine gaps or errors
+3. **Update the document** with minimal, focused fixes
+4. **Do NOT implement every suggestion** - be skeptical of external reviewers
 
-The environment variable contains one or more review commands separated by `: ` (colon-space).
-Examples:
-- Single: `opencode --model github-copilot/gpt-5 run`
-- Multiple: `opencode --model github-copilot/gpt-5 run: opencode --model deepseek/deepseek-v3 run`
-
-For each review command (process them sequentially):
-
-1. **Extract the command** (split on `: ` delimiter if multiple)
-
-2. **Run the external review:**
-   Execute the command with this review prompt:
-   ```bash
-   ${COMMAND} "Review the document at [DOCUMENT_PATH] and provide detailed feedback on:
-
-   1. Technical accuracy and completeness of the implementation approach
-   2. Alignment with project standards (check CLAUDE.md, package.json, configs, existing patterns)
-   3. Missing technical considerations (error handling, rollback, monitoring, security)
-   4. Missing behavioral considerations (user experience, edge cases, backward compatibility)
-   5. Missing strategic considerations (deployment strategy, maintenance burden, alternative timing)
-   6. Conflicts with established patterns in the codebase
-   7. Risk analysis completeness
-   8. Testing strategy thoroughness
-
-   Be specific about what's missing or incorrect. Cite file paths and line numbers where relevant. Focus on actionable improvements that reduce implementation risk."
-   ```
-
-3. **Analyze feedback with extreme skepticism:**
-   - Dismiss theoretical concerns that don't apply to this specific context
-   - Ignore feedback that adds unnecessary complexity
-   - Ignore feedback based on false assumptions
-   - **Only identify feedback that reveals GENUINE gaps, errors, or missing CRITICAL considerations**
-   - Most feedback should probably be dismissed
-
-4. **Silently address ONLY critical issues:**
-   - Fix any technical errors
-   - Add only truly important missing considerations
-   - Make minimal, focused updates
-   - **Do NOT implement every suggestion**
-   - Update the document file directly
-
-5. **If multiple reviewers:** Each subsequent reviewer sees the updated document from the previous review
-
-**Do NOT present reviews to the user** - this is an internal quality check.
-
-#### 5.3: Document Ready for Presentation
-
-The plan document has been written and quality-checked. Ready to present to user.
+The external review helps catch blind spots before presenting to the user.
 
 ### Step 6: Present Plan to User
 
