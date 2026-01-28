@@ -19,11 +19,13 @@ Get external AI review of research documents or general documents from multiple 
 ## Step 1: Determine What to Review
 
 **If `$ARGUMENTS` specifies a document:**
+
 - Use the specified document as the review target
 
 **If `$ARGUMENTS` is empty:**
 
 1. Find recent documents in `working-notes/`:
+
    ```bash
    ls -t working-notes/*.md 2>/dev/null | head -3
    ```
@@ -78,17 +80,20 @@ The external agents will read the document themselves based on your instructions
 Analyze the combined feedback from all reviewers:
 
 **Identify patterns:**
+
 - **Common themes**: Issues both reviewers flagged (higher confidence)
 - **Unique insights**: Valid points only one reviewer caught
 - **Conflicting views**: Where reviewers disagree
 
 **Critically evaluate each piece of feedback:**
+
 - Is this feedback applicable to the document's purpose?
 - Does it identify a real gap or just a theoretical concern?
 - Is the reviewer making incorrect assumptions?
 - Would addressing this meaningfully improve the document?
 
 **Be skeptical.** Dismiss feedback that:
+
 - Is based on incorrect assumptions about context
 - Doesn't serve the document's purpose
 - Is a style preference rather than a substantive issue
@@ -121,7 +126,7 @@ Provide a concise, actionable summary:
 
 ### Summary
 
-[1-2 sentences on overall assessment and recommended next steps]
+[Brief overall assessment and recommended next steps]
 ```
 
 Format the response to be scannable and actionable.

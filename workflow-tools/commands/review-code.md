@@ -26,10 +26,12 @@ Get external AI review of code changes or implementation plans from multiple mod
 ## Step 1: Determine What to Review
 
 **If `$ARGUMENTS` specifies a document or "plan":**
+
 - Use the specified document as the review target
 - This is likely a plan document describing intended code changes
 
 **If `$ARGUMENTS` specifies "diff", "changes", or "code":**
+
 - Review uncommitted changes (`git diff`) or the current PR
 
 **If `$ARGUMENTS` is empty, auto-detect:**
@@ -63,10 +65,12 @@ Before reviewing code changes, search for a related plan document that describes
    - Recent commits may reference plan documents
 
 **If a plan document is found:**
+
 - Read it to understand the intended changes
 - Include reference to it in the review instructions
 
 **If no plan document is found:**
+
 - Ask the user: "I couldn't find a plan document for these changes. Can you provide:"
   - Options:
     - "Path to a plan document"
@@ -76,6 +80,7 @@ Before reviewing code changes, search for a related plan document that describes
 ## Step 3: Craft Review Instructions
 
 Build clear, specific instructions for the external reviewers. The instructions should tell them:
+
 1. **Exactly what to review** (file path, git command, etc.)
 2. **The intent/context** (if available)
 3. **What to evaluate for** (focus areas)
@@ -184,17 +189,20 @@ The external agents will read the files and run git commands themselves based on
 Analyze the combined feedback from all reviewers:
 
 **Identify patterns:**
+
 - **Common themes**: Issues both reviewers flagged (higher confidence)
 - **Unique insights**: Valid points only one reviewer caught
 - **Conflicting views**: Where reviewers disagree
 
 **Critically evaluate each piece of feedback:**
+
 - Is this technically sound and applicable to THIS codebase?
 - Does it identify a real risk or just a theoretical concern?
 - Is the reviewer making incorrect assumptions about the code?
 - Would addressing this provide meaningful value?
 
 **Be skeptical.** External models don't know your codebase as well as Claude does. Dismiss feedback that:
+
 - Is based on incorrect assumptions
 - Doesn't apply to your specific context
 - Adds unnecessary complexity
@@ -227,7 +235,7 @@ Provide a concise, actionable summary:
 
 ### Summary
 
-[1-2 sentences on overall assessment and recommended next steps]
+[Brief overall assessment and recommended next steps]
 ```
 
 Format the response to be scannable and actionable.
