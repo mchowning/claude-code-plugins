@@ -2,7 +2,7 @@
 name: workflow-tools:review-doc
 description: Get external AI review of research documents or general documents. Runs GPT and Gemini in parallel for diverse perspectives.
 allowed-tools:
-  - Bash(${CLAUDE_PLUGIN_ROOT}/scripts/review.sh *)
+  - Bash(${CLAUDE_PLUGIN_ROOT}/scripts/review.sh:*)
   - Bash(ls *)
   - Bash(date *)
   - Read

@@ -11,8 +11,9 @@ This repository is a marketplace for Claude Code plugins. It currently contains 
     - [2. `/create-plan-doc`](#2-create-plan-doc)
     - [3. `/implement-plan`](#3-implement-plan)
     - [4. `/create-work-summary-doc`](#4-create-work-summary-doc)
-    - [5. `/external-review`](#5-external-review)
-    - [6. `/investigate-bug`](#6-investigate-bug)
+    - [5. `/review-code`](#5-review-code)
+    - [6. `/review-doc`](#6-review-doc)
+    - [7. `/investigate-bug`](#7-investigate-bug)
   - [Specialized Agents](#specialized-agents)
 - [Installation](#installation)
   - [Prerequisites](#prerequisites)
@@ -20,7 +21,6 @@ This repository is a marketplace for Claude Code plugins. It currently contains 
   - [Project-Level Auto-Install](#project-level-auto-install)
   - [Local Development](#local-development)
 - [Configuration](#configuration)
-  - [Directory Variables](#directory-variables)
 - [Workflow Example](#workflow-example)
 - [Usage Philosophy & Best Practices](#usage-philosophy--best-practices)
   - [Philosophy & Core Principles](#philosophy--core-principles)
@@ -33,7 +33,6 @@ This repository is a marketplace for Claude Code plugins. It currently contains 
   - [Research Documents](#research-documents)
   - [Plan Documents](#plan-documents)
   - [Summary Documents](#summary-documents)
-- [Helper Scripts](#helper-scripts)
 - [Best Practices](#best-practices)
 - [Development](#development)
   - [Areas For Improvement](#areas-for-improvement)
@@ -44,7 +43,7 @@ This repository is a marketplace for Claude Code plugins. It currently contains 
 
 ## Workflow Tools Plugin
 
-The Workflow Tools plugin provides six commands that work together with specialized research agents.
+The Workflow Tools plugin provides seven commands that work together with specialized research agents.
 
 **Design Philosophy:** This workflow is designed to be powerful yet simple enough to easily understand and modify. As frontier AI models improve rapidly, having a straightforward system means you can easily evolve your workflow to take advantage of new capabilities rather than being locked into complex, opaque tooling.
 
@@ -54,8 +53,9 @@ The full flow from start to finish is:
 2. `/create-plan-doc`
 3. `/implement-plan`
 4. `/create-work-summary-doc`
-5. `/external-review`
-6. `/investigate-bug`
+5. `/review-code`
+6. `/review-doc`
+7. `/investigate-bug`
 
 For the full flow, each command would build off of the outputs of the previous commands. This helps to keep the agent's context window as free as possible during each step in the process. For example, the idea behind creating such detailed implementation plan documents is that the actual implementation should be very straightforward.
 
@@ -125,15 +125,13 @@ Generate comprehensive implementation summaries documenting what changed and why
 
 **Output:** Summary document in `notes/{date}_{topic}.md`
 
-#### 5. `/external-review`
+#### 5. `/review-code`
 
-Obtain external review of research or plan documents using another AI model for a fresh perspective. This command must be explicitly invoked—Claude will not trigger it automatically.
-
-This command is particularly useful after creating research or plan documents to identify blind spots, missing considerations, or technical issues before proceeding to implementation.
+Obtain external review of code changes or implementation plans using another AI model for a fresh perspective. This command must be explicitly invoked—Claude will not trigger it automatically.
 
 **What it does:**
 
-- Prompts you to select a document (prioritizes recently created documents)
+- Prompts you to select a document or specify code changes to review
 - Requires `CLAUDE_EXTERNAL_REVIEW_COMMAND` environment variable
   - Single reviewer: `"opencode --model github-copilot/gpt-5 run"`
   - Multiple reviewers: `'["opencode --model github-copilot/gpt-5 run", "opencode --model github-copilot/gemini-3-pro-preview run"]'`
@@ -143,7 +141,20 @@ This command is particularly useful after creating research or plan documents to
 - Presents categorized recommendations (Implement/Consider/Discard) with reasoning
 - Shows common themes and conflicting views when multiple reviewers are used
 
-#### 6. `/investigate-bug`
+#### 6. `/review-doc`
+
+Obtain external review of research documents or general documents using another AI model for a fresh perspective. This command must be explicitly invoked—Claude will not trigger it automatically.
+
+**What it does:**
+
+- Prompts you to select a document (prioritizes recently created documents)
+- Requires `CLAUDE_EXTERNAL_REVIEW_COMMAND` environment variable (same configuration as `/review-code`)
+- Sends comprehensive review prompt covering completeness, accuracy, and clarity
+- Critically filters the external feedback to identify truly actionable items
+- Presents categorized recommendations (Implement/Consider/Discard) with reasoning
+- Shows common themes and conflicting views when multiple reviewers are used
+
+#### 7. `/investigate-bug`
 
 Systematically investigate bugs using the scientific method to identify root causes rather than symptoms.
 
@@ -160,7 +171,7 @@ Systematically investigate bugs using the scientific method to identify root cau
 
 ### Specialized Agents
 
-The plugin includes nine specialized agents that are automatically invoked by the slash commands:
+The plugin includes eight specialized agents that are automatically invoked by the slash commands:
 
 1. **codebase-locator** - Finds WHERE files, directories, and components live by topic/feature
 2. **codebase-analyzer** - Analyzes HOW code works with precise file:line references and data flow
@@ -170,7 +181,8 @@ The plugin includes nine specialized agents that are automatically invoked by th
 6. **web-search-researcher** - Conducts web research for external documentation and resources
 7. **jira-searcher** - Searches Jira for issues and historical context
 8. **git-history** - Searches git history, PRs, and PR comments for implementation context
-9. **frontmatter-generator** - Internal utility that collects git metadata (date/time, commit, branch, repository) for documentation templates
+
+Additionally, the **frontmatter** skill provides git metadata collection (date/time, commit, branch, repository) for documentation templates.
 
 ## Installation
 
@@ -463,7 +475,7 @@ Summary documents include:
 
 ## Metadata Collection
 
-The plugin includes a specialized `frontmatter-generator` agent that collects git metadata and timestamps for documentation frontmatter. This agent executes bash commands directly (using pre-approved commands like `date`, `git rev-parse`, `git branch`) without requiring external scripts.
+The plugin includes a `frontmatter` skill that collects git metadata and timestamps for documentation frontmatter. This skill executes a shell script to gather metadata (date/time, git commit, branch, repository) for use in document YAML frontmatter.
 
 ## Best Practices
 
@@ -496,7 +508,8 @@ claude-code-plugins/          # Marketplace root
     │   ├── create-plan-doc.md
     │   ├── implement-plan.md
     │   ├── create-work-summary-doc.md
-    │   ├── external-review.md
+    │   ├── review-code.md
+    │   ├── review-doc.md
     │   └── investigate-bug.md
     ├── scripts/              # Shell scripts
     │   └── external-review.sh
@@ -508,8 +521,10 @@ claude-code-plugins/          # Marketplace root
     │   ├── notes-analyzer.md
     │   ├── web-search-researcher.md
     │   ├── jira-searcher.md
-    │   ├── git-history.md
-    │   └── frontmatter-generator.md
+    │   └── git-history.md
+    ├── skills/               # Skills
+    │   └── frontmatter/
+    │       └── SKILL.md
     └── CLAUDE.md
 ```
 

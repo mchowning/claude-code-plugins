@@ -5,12 +5,15 @@
 
 # Plugin Commands
 
-This plugin provides four workflow commands:
+This plugin provides seven workflow commands:
 
 1. **`/create-research-doc`** - Conduct comprehensive research across the codebase using parallel sub-agents
 2. **`/create-plan-doc`** - Create detailed implementation plans through interactive, iterative process
 3. **`/implement-plan`** - Follow an approved technical plan with TDD and progress tracking
 4. **`/create-work-summary-doc`** - Generate comprehensive implementation summaries documenting what was changed and why
+5. **`/review-code`** - Get external AI review of code changes or implementation plans
+6. **`/review-doc`** - Get external AI review of research documents or general documents
+7. **`/investigate-bug`** - Systematically investigate bugs using the scientific method
 
 # Specialized Agents
 

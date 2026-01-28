@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-01-26
+
+### Changed
+- **Split `/external-review` into specialized commands**
+  - `/workflow-tools:review-code` for reviewing code changes and implementation plans
+  - `/workflow-tools:review-doc` for reviewing research documents and general documents
+- Added `workflow-tools:` prefix to all commands for namespace consistency
+
 ## 2026-01-15
 
 ### Changed
