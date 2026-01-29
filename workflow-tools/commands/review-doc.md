@@ -58,7 +58,7 @@ Evaluate:
 
 6. **Missing perspectives**: What viewpoints or considerations are not represented?
 
-7. **Assumptions**: What assumptions does this document make? Are they stated explicitly?
+7. **Assumptions**: What assumptions does this document make? Are they stated explicitly? Could they silently become invalid if circumstances change?
 
 8. **Risk analysis**: If applicable, are risks adequately identified and assessed?
 

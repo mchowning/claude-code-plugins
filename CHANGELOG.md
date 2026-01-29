@@ -1,5 +1,17 @@
 # Changelog
 
+## 2026-01-29
+
+### Changed
+- **Consolidated `/review-code` evaluation criteria into shared core block**
+  - Unified "Fragility" criterion wording across all three review scenarios (plans, code with plan, code without plan)
+  - Now uses improved wording: "Does this make the code fragile or easy to break when changes are made—either to this code or elsewhere in the codebase?"
+  - Templates now reference core criteria rather than repeating them, making future updates single-source
+  - Added "Plan-specific" criterion for plan reviews asking about better alternatives
+- **Strengthened `/review-doc` Assumptions criterion**
+  - Added forward-looking perspective: "Could they silently become invalid if circumstances change?"
+  - Aligns with review-code's approach to surfacing fragile assumptions
+
 ## 2026-01-26
 
 ### Changed

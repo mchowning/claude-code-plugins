@@ -79,39 +79,56 @@ Before reviewing code changes, search for a related plan document that describes
 
 ## Step 3: Craft Review Instructions
 
-Build clear, specific instructions for the external reviewers. The instructions should tell them:
+Build clear, specific instructions for the external reviewers using the templates below.
 
-1. **Exactly what to review** (file path, git command, etc.)
-2. **The intent/context** (if available)
-3. **What to evaluate for** (focus areas)
+### Core Evaluation Criteria
 
-**For plan documents:**
+All reviews should evaluate:
+
+1. **Assumptions**: What assumptions does this make? Are they safe? Could they silently break if conditions change?
+
+2. **Fragility**: Does this make the code fragile or easy to break when changes are made—either to this code or elsewhere in the codebase?
+
+3. **Hidden coupling**: Are there implicit dependencies (execution order, global state, timing, external systems) that aren't obvious?
+
+4. **Test coverage**: Are tests verifying the important behaviors? Would a regression be caught?
+
+5. **Security**: Any vulnerabilities introduced (injection, auth bypass, data exposure)?
+
+6. **Error handling**: If something fails, will the error surface clearly?
+
+7. **Unintended behavioral changes**: Are there changes to existing behaviors or user flows that weren't intended?
+
+8. **What's missing**: Is there anything that should be included but isn't?
+
+---
+
+### Template: Plan Documents
+
+Use when reviewing an implementation plan:
 
 ```
 Review the implementation plan at: [exact file path]
 
-Evaluate:
+Evaluate using the core criteria:
+- Assumptions
+- Fragility
+- Hidden coupling
+- Test coverage
+- Security
+- Error handling
+- Unintended behavioral changes
+- What's missing
 
-1. **Assumptions**: What assumptions does this plan make? Are they documented? Could they silently break if conditions change?
-
-2. **Fragility**: Does this approach make the code fragile? Could future modifications easily break this functionality without the developer realizing?
-
-3. **Hidden coupling**: Are there implicit dependencies (execution order, global state, external systems) that aren't obvious?
-
-4. **Test coverage**: Does the testing strategy verify the important behaviors? Would a regression be caught?
-
-5. **Security**: Does this introduce any vulnerabilities (injection, auth bypass, data exposure)?
-
-6. **Error handling**: If something fails, will the error surface clearly? Or could it fail silently?
-
-7. **Unintended behavioral changes**: Could this plan inadvertently change existing behaviors or user flows that weren't intended to change?
-
-8. **What's missing**: Is there anything NOT in this plan that probably should be? Related updates, migrations, documentation?
+Plus:
+- **Plan-specific**: Does this approach make sense? Are there better alternatives?
 
 Be specific. Cite sections of the plan. Focus on actionable issues, not style preferences.
 ```
 
-**For code changes with plan context:**
+### Template: Code with Plan Context
+
+Use when reviewing code changes AND a plan document was found:
 
 ```
 Review the code changes in this repository.
@@ -123,53 +140,41 @@ To see the changes, run: git diff
 The intended changes are described in: [plan document path]
 Read that document to understand what these changes are supposed to accomplish.
 
-Evaluate:
+Evaluate using the core criteria:
+- Assumptions
+- Fragility
+- Hidden coupling
+- Test coverage
+- Security
+- Error handling
+- Unintended behavioral changes
+- What's missing
 
-1. **Alignment with intent**: Do these changes achieve what the plan describes? Are there deviations?
-
-2. **Unintended behavioral changes**: Do these changes modify any behaviors or user flows that weren't mentioned in the plan? Look for side effects.
-
-3. **Assumptions**: What assumptions do these changes make? Are they safe?
-
-4. **Fragility**: Do these changes make the code fragile or easy to break in the future?
-
-5. **Hidden coupling**: Are there implicit dependencies being created?
-
-6. **Test coverage**: Are there tests verifying these changes?
-
-7. **Security**: Any new vulnerabilities introduced?
-
-8. **Error handling**: If something fails, will it be clear why?
-
-9. **What's missing**: Based on the plan, is anything missing from these changes?
+Plus:
+- **Alignment with intent**: Do these changes achieve what the plan describes? Are there deviations?
+- **What's missing from plan**: Based on the plan, is anything missing from these changes?
 
 Be specific. Cite file names and line numbers. Focus on actionable issues.
 ```
 
-**For code changes without plan context:**
+### Template: Code without Plan Context
+
+Use when reviewing code changes without a plan document:
 
 ```
 Review the code changes in this repository.
 
 To see the changes, run: git diff
 
-Evaluate:
-
-1. **Assumptions**: What assumptions do these changes make? Are they safe?
-
-2. **Fragility**: Do these changes make the code fragile or easy to break in the future?
-
-3. **Hidden coupling**: Are there implicit dependencies being created?
-
-4. **Test coverage**: Are there tests verifying these changes?
-
-5. **Security**: Any new vulnerabilities introduced?
-
-6. **Error handling**: If something fails, will it be clear why?
-
-7. **Behavioral changes**: What behaviors are being changed? Are any of them potentially unintended?
-
-8. **What's missing**: Is there anything these changes should include but don't?
+Evaluate using the core criteria:
+- Assumptions
+- Fragility
+- Hidden coupling
+- Test coverage
+- Security
+- Error handling
+- Unintended behavioral changes
+- What's missing
 
 Be specific. Cite file names and line numbers. Focus on actionable issues.
 ```
