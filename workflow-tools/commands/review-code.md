@@ -85,7 +85,11 @@ Build clear, specific instructions for the external reviewers using the template
 
 All reviews should evaluate:
 
-1. **Assumptions**: What assumptions does this make? Are they safe? Could they silently break if conditions change?
+1. **Assumptions**: What assumptions does this make? For each assumption identified:
+   - **Attempt to validate it** by checking the codebase, documentation, or reasoning
+   - If validated: briefly note how you confirmed it
+   - If NOT validated: explicitly flag as "UNVALIDATED ASSUMPTION" with potential risks
+   - Are these assumptions likely to hold over time, or could they become invalid as the codebase evolves?
 
 2. **Fragility**: Does this make the code fragile or easy to break when changes are made—either to this code or elsewhere in the codebase?
 

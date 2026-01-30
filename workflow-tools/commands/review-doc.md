@@ -58,7 +58,11 @@ Evaluate:
 
 6. **Missing perspectives**: What viewpoints or considerations are not represented?
 
-7. **Assumptions**: What assumptions does this document make? Are they stated explicitly? Could they silently become invalid if circumstances change?
+7. **Assumptions**: What assumptions does this document make? For each assumption identified:
+   - **Attempt to validate it** by checking source material, codebase, or external references
+   - If validated: briefly note how you confirmed it
+   - If NOT validated: explicitly flag as "UNVALIDATED ASSUMPTION" with potential risks
+   - Are they stated explicitly in the document? Are these assumptions likely to hold over time?
 
 8. **Risk analysis**: If applicable, are risks adequately identified and assessed?
 

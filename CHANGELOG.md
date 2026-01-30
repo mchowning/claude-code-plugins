@@ -1,5 +1,14 @@
 # Changelog
 
+## 2026-01-30
+
+### Changed
+- **Enhanced Assumptions criterion in `/review-code` and `/review-doc` with active validation**
+  - Reviewers now attempt to validate each assumption rather than just identifying them
+  - Validated assumptions require brief confirmation notes
+  - Unvalidated assumptions explicitly flagged as "UNVALIDATED ASSUMPTION" with potential risks
+  - Shifts reviews from passive observation to active investigation
+
 ## 2026-01-29
 
 ### Changed
