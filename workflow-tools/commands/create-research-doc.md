@@ -168,6 +168,10 @@ Examples of when to stop and ask:
 
      [Patterns, conventions, and design decisions discovered]
 
+     ## Current Requirements (from tests and Jira)
+
+     [Behaviors specified by test assertions that must be preserved. Include e2e tests that capture user-facing workflows. Also note any acceptance criteria or requirements from related Jira tickets.]
+
      ## Historical Context
 
      [Relevant insights from `working-notes/` directory and any relevant Jira issues. Include references for all insights.]

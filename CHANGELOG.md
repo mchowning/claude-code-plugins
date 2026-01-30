@@ -3,6 +3,14 @@
 ## 2026-01-30
 
 ### Changed
+- **Added test-as-specification discovery to `codebase-analyzer` agent**
+  - New Core Responsibility #4: "Identify Requirements from Tests"
+  - New Analysis Strategy Step 4: "Extract Test Specifications"
+  - New output section: "Specified Behaviors (from tests)" with critical behaviors to preserve
+  - Emphasizes e2e tests as specifications of user-facing workflows
+- **Added "Current Requirements (from tests and Jira)" section to `/create-research-doc` template**
+  - Research documents now include behaviors specified by test assertions and Jira acceptance criteria
+  - Helps identify requirements that must be preserved during implementation
 - **Enhanced Assumptions criterion in `/review-code` and `/review-doc` with active validation**
   - Reviewers now attempt to validate each assumption rather than just identifying them
   - Validated assumptions require brief confirmation notes
