@@ -3,6 +3,13 @@
 ## 2026-01-30
 
 ### Changed
+- **Added two-phase summary → detailed plan workflow to `/create-plan-doc`**
+  - Step 3 now writes a summary document to disk with `status: summary` in frontmatter
+  - Summary includes overview, scope, high-level phases (no code/file paths), and risks
+  - User can share summary for async feedback or close session and return later
+  - Step 4 overwrites the same file with detailed implementation plan (`status: complete`)
+  - Eliminates orphan files by using a single document that evolves
+  - Added guideline #7 documenting the two-phase approach
 - **Added test-as-specification discovery to `codebase-analyzer` agent**
   - New Core Responsibility #4: "Identify Requirements from Tests"
   - New Analysis Strategy Step 4: "Extract Test Specifications"

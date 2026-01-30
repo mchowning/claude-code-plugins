@@ -191,35 +191,118 @@ After getting initial clarifications:
    Which approach aligns best with your vision?
    ```
 
-### Step 3: Plan Structure Development
+### Step 3: Write Summary Document for Approval
 
 Once aligned on approach:
 
-1. **Create initial plan outline**:
+1. **Gather metadata** by running the frontmatter script:
+   - Execute: `${CLAUDE_PLUGIN_ROOT}/skills/frontmatter/workflow-tools-frontmatter.sh`
 
-   ```
-   Here's my proposed plan structure:
+2. **Generate the filename**:
+   - Format: `working-notes/{YYYY-MM-DD}_plan_[descriptive-name].md`
+   - Use `date '+%Y-%m-%d'` for the timestamp
+   - **Store this filename** - you will need it in Step 4
 
-   ## Overview
-   [1-2 sentence summary]
+3. **Write the summary document** to disk with `status: summary` in frontmatter:
 
-   ## Implementation Phases:
-   1. [Phase name] - [what it accomplishes]
-   2. [Phase name] - [what it accomplishes]
-   3. [Phase name] - [what it accomplishes]
+````markdown
+---
+date: [Current date and time with timezone in ISO format]
+git_commit: [Current commit hash]
+branch: [Current branch name]
+repository: [Repository name]
+topic: "[Feature/Task Name]"
+tags: [plans, relevant-component-names]
+status: summary
+last_updated: [Current date in YYYY-MM-DD format]
+---
 
-   Does this phasing make sense? Should I adjust the order or granularity?
-   ```
+# [Feature/Task Name] Implementation Plan
 
-2. **Share this plan outline with the user and get approval** before writing details
+> **Status: Summary** — Awaiting approval for detailed implementation plan.
 
-### Step 4: Write Plan Document
+## Overview
 
-After structure approval:
+[2-3 sentences: what we're implementing and why]
 
-1. Run the frontmatter script: `${CLAUDE_PLUGIN_ROOT}/skills/frontmatter/workflow-tools-frontmatter.sh`
-2. **Write the plan** to `working-notes/{YYYY-MM-DD}_plan_[descriptive-name].md`. Use `date '%Y-%m-%d'` for the timestamp in the filename
-3. **Use this template structure**:
+## Current State
+
+[Brief description of what exists now - NO file paths or code snippets]
+
+## Desired End State
+
+[Behavioral description of what success looks like]
+
+## Scope
+
+### What We're Doing:
+
+- [Item 1]
+- [Item 2]
+- [Item 3]
+
+### What We're NOT Doing:
+
+- [Out-of-scope item 1]
+- [Out-of-scope item 2]
+
+## Implementation Phases
+
+### Phase 1: [Name]
+
+[1-2 paragraphs describing what this phase accomplishes and the general approach. Explain the "what" and "why" clearly. Mention which areas of the codebase will be touched (e.g., "the storage layer" or "the API handlers") without specific file paths or code. Include enough detail that the reader understands the implementation strategy, not just the goal.]
+
+### Phase 2: [Name]
+
+[1-2 paragraphs with the same level of detail. The reader should finish this section understanding how the phases build on each other and what the implementation journey looks like.]
+
+### Phase 3: [Name] (if needed)
+
+[Continue pattern as needed]
+
+## Key Risks & Considerations
+
+- [Risk 1]
+- [Risk 2]
+
+## References
+
+- Original ticket: [if applicable]
+- Related research: [if applicable]
+````
+
+**Phase description guidance:**
+- Write 1-2 substantive paragraphs per phase (not just a sentence)
+- Describe the approach and what will be accomplished
+- Mention areas of codebase (e.g., "storage layer", "API handlers") without specific file paths
+- NO code snippets, NO specific line numbers
+- Reader should understand the implementation strategy, not just the goal
+
+4. **Present the summary and await explicit approval**:
+
+```
+I've created the plan summary at:
+`working-notes/[filename].md`
+
+Please review. You can share it for async feedback or close this session and return later.
+
+When ready, say "approved" and I'll expand this into a detailed implementation plan with code changes, file paths, and success criteria.
+
+**The detailed plan will overwrite this summary file.**
+```
+
+5. **Wait for user approval** before proceeding to Step 4
+
+### Step 4: Overwrite Summary with Detailed Plan
+
+After user approval of the summary:
+
+1. **Re-run the frontmatter script** for a fresh `last_updated` timestamp:
+   - Execute: `${CLAUDE_PLUGIN_ROOT}/skills/frontmatter/workflow-tools-frontmatter.sh`
+
+2. **Use the EXACT SAME filename** from Step 3 - this overwrites the summary document
+
+3. **Overwrite the summary** with the detailed implementation plan using this template:
 
 ````markdown
 ---
@@ -434,6 +517,12 @@ Please review it and let me know:
 - **Wait for their answer** before proceeding
 - Never defer ambiguities to an "Open Questions" section - resolve them in real-time through conversation
 - The implementation plan must be complete and actionable with every decision already made
+
+7. **Two-Phase Approach**:
+- Step 3 writes a summary document (`status: summary`) for review
+- Step 4 overwrites it with the detailed implementation plan (`status: complete`)
+- The summary is shareable for async feedback but doesn't persist after detail is written
+- Users can close the session after Step 3 and return later to continue
 
 ## Success Criteria Guidelines
 
