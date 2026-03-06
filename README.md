@@ -1,3 +1,5 @@
+# This repository is no longer being updated
+
 # Claude Code Plugins Marketplace
 
 This repository is a marketplace for Claude Code plugins. It currently contains the **Workflow Tools** plugin for codebase research, planning, implementation, and documentation.
