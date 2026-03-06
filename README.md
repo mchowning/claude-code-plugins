@@ -1,4 +1,4 @@
-# This repository is no longer being updated
+# ⚠️ This repository is no longer being updated
 
 # Claude Code Plugins Marketplace
 
